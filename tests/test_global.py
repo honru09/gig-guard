@@ -62,6 +62,9 @@ class PayAnyCurrency(unittest.TestCase):
         e = estimate("报酬500元，大概2小时", fee_rate=0)
         self.assertEqual((e.currency, e.effective_hourly_yen), ("CNY", 250))
 
+    def test_cny_fee_is_not_the_reward(self):
+        self.assertIsNone(estimate("入职需要先交200元培训费").total_yen)
+
     def test_presets_are_sane(self):
         self.assertEqual(PLATFORM_FEES["direct"], 0.0)
         self.assertTrue(all(0 <= v < 0.5 for v in PLATFORM_FEES.values()))
@@ -72,6 +75,23 @@ class PayAnyCurrency(unittest.TestCase):
         self.assertEqual(rep.min_hourly_yen, DEFAULT_FLOORS["USD"])
         self.assertTrue(rep.below_floor)
         self.assertEqual(rep.risk, "medium")
+
+
+class ReportLanguage(unittest.TestCase):
+    def test_single_language_reports(self):
+        from gigguard.render import text_report
+        rep = analyze(sample("09_zh_wechat.txt"))
+        zh = text_report(rep, "zh")
+        self.assertIn("规则检出", zh)
+        self.assertIn("把沟通引到平台外", zh)
+        self.assertNotIn("Rule hits", zh)
+        self.assertNotIn("ルール", zh)
+        en = text_report(rep, "en")
+        self.assertIn("Rule hits", en)
+        self.assertNotIn("規約", en)
+        ja = text_report(analyze(sample("01_line_redirect.txt")), "ja")
+        self.assertIn("ルールで検出", ja)
+        self.assertNotIn("Upwork", ja)
 
 
 class Replies(unittest.TestCase):

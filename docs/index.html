@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -7,59 +7,67 @@
 <meta name="description" content="Paste a freelance gig post or client message (any platform, EN/JA/ZH). Rules + Gemma, running in your browser and on your own machine.">
 <style>
 :root{--fg:#1f2328;--muted:#59636e;--bg:#f6f8fa;--line:#d1d9e0;--accent:#0969da}
-body{font-family:system-ui,"Hiragino Sans","Noto Sans JP",sans-serif;max-width:900px;margin:2rem auto;padding:0 1rem;color:var(--fg);line-height:1.55}
-h1{margin-bottom:.2rem}
-.sub{color:var(--muted);margin-top:0}
+body{font-family:system-ui,"Hiragino Sans","PingFang SC","Noto Sans JP","Noto Sans SC",sans-serif;max-width:900px;margin:2rem auto;padding:0 1rem;color:var(--fg);line-height:1.55}
+header{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;flex-wrap:wrap}
+h1{margin:0 0 .2rem}
+.sub{color:var(--muted);margin-top:.2rem}
 textarea{width:100%;height:11rem;font:inherit;padding:.6rem;box-sizing:border-box;border:1px solid var(--line);border-radius:6px}
 button,select{font:inherit;padding:.45rem 1rem;border-radius:6px;border:1px solid var(--line);background:#fff;cursor:pointer}
 button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
 .row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin:.6rem 0}
-pre{font-size:14.5px;font-family:ui-monospace,"Noto Sans Mono CJK JP",monospace;white-space:pre-wrap;background:var(--bg);padding:1rem;border-radius:8px}
+pre{font-size:14.5px;font-family:ui-monospace,"Noto Sans Mono CJK SC","Noto Sans Mono CJK JP",monospace;white-space:pre-wrap;background:var(--bg);padding:1rem;border-radius:8px}
 details{background:var(--bg);padding:.6rem 1rem;border-radius:8px;margin:1rem 0}
 code{background:var(--bg);padding:0 .25rem;border-radius:4px}
-small,.muted{color:var(--muted)}
+.muted{color:var(--muted)}
 #status{font-size:.9rem;color:var(--muted)}
 </style>
 </head>
 <body>
-<h1>gig-guard</h1>
-<p class="sub">Paste a gig post or client message from Upwork, Fiverr, Freelancer.com, CrowdWorks, Lancers or a DM, in English, 日本語 or 中文. Nothing is sent to any server: the checker runs in this tab (Python via Pyodide), and Gemma runs on <b>your</b> machine through Ollama.</p>
+<header>
+  <h1>gig-guard</h1>
+  <label><span data-i18n="uiLang"></span>
+    <select id="uiLang"><option value="en">English</option><option value="ja">日本語</option><option value="zh">中文</option></select>
+  </label>
+</header>
+<p class="sub" data-i18n-html="sub"></p>
 
 <div class="row">
-  <label>サンプル / sample:
+  <label><span data-i18n="sample"></span>
   <select id="sample">
-    <option value="">—</option>
-    <option value="line">LINE に誘導 / move to LINE</option>
-    <option value="trial">無償トライアル / unpaid trial</option>
-    <option value="mule">荷物の転送 / parcel forwarding</option>
-    <option value="scam">情報商材 / pay-to-work</option>
-    <option value="ok">普通の案件 / normal job (JA)</option>
-    <option value="upwork">Upwork: "contact me on WhatsApp" (EN)</option>
-    <option value="fiverr">Fiverr: free sample first (EN)</option>
-    <option value="wechat">加微信 + 培训费 (ZH)</option>
-    <option value="dev">Normal Upwork dev job (EN)</option>
+    <option value="" data-i18n="pick"></option>
+    <option value="wechat" data-i18n="s_wechat"></option>
+    <option value="upwork" data-i18n="s_upwork"></option>
+    <option value="fiverr" data-i18n="s_fiverr"></option>
+    <option value="line" data-i18n="s_line"></option>
+    <option value="trial" data-i18n="s_trial"></option>
+    <option value="mule" data-i18n="s_mule"></option>
+    <option value="scam" data-i18n="s_scam"></option>
+    <option value="dev" data-i18n="s_dev"></option>
+    <option value="ok" data-i18n="s_ok"></option>
   </select></label>
 </div>
-<textarea id="text" placeholder="例: ご応募ありがとうございます。詳細はLINEでお伝えします…"></textarea>
+<textarea id="text"></textarea>
 <div class="row">
-  <button class="primary" id="check" disabled>チェック / Check</button>
-  <label><input type="checkbox" id="useGemma"> ローカルの Gemma も使う / also ask my local Gemma</label>
-  <select id="model"><option>gemma4:e4b</option><option>gemma4:e2b</option><option>gemma3:4b</option></select>
-  <select id="lang"><option value="all">EN + 日本語 + 中文</option><option value="en">English</option><option value="ja">日本語</option><option value="zh">中文</option></select>
-  <select id="platform"><option value="direct">direct (0%)</option><option value="upwork">Upwork (~10%)</option><option value="fiverr">Fiverr (20%)</option><option value="freelancer">Freelancer.com (10%)</option><option value="crowdworks">CrowdWorks (20%)</option><option value="lancers">Lancers (16.5%)</option><option value="coconala">Coconala (22%)</option></select>
+  <button class="primary" id="check" disabled data-i18n="check"></button>
+  <label><span data-i18n="platform"></span>
+  <select id="platform"><option value="direct">direct (0%)</option><option value="upwork">Upwork (~10%)</option><option value="fiverr">Fiverr (20%)</option><option value="freelancer">Freelancer.com (10%)</option><option value="crowdworks">CrowdWorks (20%)</option><option value="lancers">Lancers (16.5%)</option><option value="coconala">Coconala (22%)</option></select></label>
 </div>
-<div id="status">Python を読み込み中… / loading Python…</div>
+<div class="row">
+  <label><input type="checkbox" id="useGemma"> <span data-i18n="useGemma"></span></label>
+  <select id="model"><option>gemma4:e4b</option><option>gemma4:e2b</option><option>gemma3:4b</option></select>
+</div>
+<div id="status"></div>
 <pre id="out" hidden></pre>
 
 <details>
-<summary>ローカルの Gemma をつなぐ / Connect your local Gemma</summary>
-<p>Without Gemma you get the rule checks and the pay math. To add Gemma's grounded findings, run Ollama on this computer and allow this page as an origin:</p>
+<summary data-i18n="connect"></summary>
+<p data-i18n="connect1"></p>
 <pre>ollama pull gemma4:e4b
 OLLAMA_ORIGINS=https://honru09.github.io ollama serve</pre>
-<p class="muted">The page then calls <code>http://127.0.0.1:11434</code> directly from your browser. Your browser may ask whether this site may access devices on your local network: that request goes to your own machine, not to the internet.</p>
+<p class="muted" data-i18n-html="connect2"></p>
 </details>
 
-<p class="muted">Code: <a href="https://github.com/honru09/gig-guard">github.com/honru09/gig-guard</a> · CLI and local web UI: <code>python -m gigguard serve</code></p>
+<p class="muted"><span data-i18n="code"></span> <a href="https://github.com/honru09/gig-guard">github.com/honru09/gig-guard</a> · <code>python -m gigguard serve</code></p>
 
 <script src="https://cdn.jsdelivr.net/pyodide/v314.0.7/full/pyodide.js"></script>
 <script>
@@ -75,8 +83,81 @@ const SAMPLES = {
   dev: "We need a Spring Boot developer to fix a bug in our REST API (pagination returns duplicates).\nFixed price $200, estimated 4-6 hours. Repo access will be shared through GitHub once the contract starts.",
   ok: "店舗リサーチ・リスト作成のお仕事\n\nペット関連のお店を20件ほど調べて、スプレッドシートに店名・住所・URL・営業時間を入力していただきます。\n報酬：固定 3,000円\n作業時間の目安：2時間程度\n初回のみオンラインで15分ほど説明会を行います（Google Meet）。",
 };
+const I18N = {
+  en: {
+    uiLang: "Language", sample: "Example:", pick: "— pick an example —",
+    sub: "Paste a gig post or client message from Upwork, Fiverr, Freelancer.com, CrowdWorks, Lancers or a DM, in English, Japanese or Chinese. Nothing is sent to any server: the checker runs in this tab (Python via Pyodide), and Gemma runs on <b>your</b> machine through Ollama.",
+    s_wechat: "Chinese: “add my WeChat” + training fee", s_upwork: "Upwork: “contact me on WhatsApp”", s_fiverr: "Fiverr: free sample first",
+    s_line: "Japanese: move to LINE", s_trial: "Japanese: unpaid trial", s_mule: "Japanese: parcel forwarding",
+    s_scam: "Japanese: pay-to-work", s_dev: "Normal Upwork dev job", s_ok: "Normal Japanese job",
+    placeholder: "Paste a job post or client message…", check: "Check", platform: "Platform fee:",
+    useGemma: "also ask my local Gemma", loading: "Loading Python…", ready: "Ready: rules + pay math run in this tab.",
+    asking: "Asking {m} on your machine…", done: "Done.", doneGemma: "Done: Gemma ran on your machine.",
+    noOllama: "could not reach local Ollama ({e}). See “Connect your local Gemma” below.",
+    connect: "Connect your local Gemma",
+    connect1: "Without Gemma you get the rule checks and the pay math. To add Gemma's quote-grounded findings, run Ollama on this computer and allow this page as an origin:",
+    connect2: "The page then calls <code>http://127.0.0.1:11434</code> directly from your browser. Your browser may ask whether this site may access your local network: that request goes to your own machine, not to the internet.",
+    code: "Code:", failed: "Failed to load Python: ",
+  },
+  ja: {
+    uiLang: "表示言語", sample: "サンプル:", pick: "— サンプルを選択 —",
+    sub: "Upwork・Fiverr・Freelancer.com・クラウドワークス・ランサーズ・DM などの案件文やクライアントのメッセージ（英語・日本語・中国語）を貼り付けてください。データはどこにも送信されません。チェックはこのタブ内（Pyodide 上の Python）で、Gemma は<b>あなたの</b>PCの Ollama で動きます。",
+    s_wechat: "中国語: WeChat 追加＋研修費", s_upwork: "Upwork: WhatsApp に誘導", s_fiverr: "Fiverr: 無料サンプル要求",
+    s_line: "LINE に誘導", s_trial: "無償トライアル", s_mule: "荷物の転送",
+    s_scam: "情報商材（先払い）", s_dev: "普通の Upwork 開発案件", s_ok: "普通の案件",
+    placeholder: "案件文やメッセージを貼り付け…", check: "チェック", platform: "手数料:",
+    useGemma: "ローカルの Gemma も使う", loading: "Python を読み込み中…", ready: "準備完了: ルールと報酬計算はこのタブで実行します。",
+    asking: "あなたのPCの {m} に問い合わせ中…", done: "完了", doneGemma: "完了: Gemma はあなたのPCで実行されました。",
+    noOllama: "ローカルの Ollama に接続できませんでした（{e}）。下の「ローカルの Gemma をつなぐ」を参照してください。",
+    connect: "ローカルの Gemma をつなぐ",
+    connect1: "Gemma なしでもルール判定と報酬計算は使えます。引用付きの Gemma 判定を追加するには、このPCで Ollama を起動し、このページを許可してください:",
+    connect2: "ページはブラウザから <code>http://127.0.0.1:11434</code> に直接アクセスします。ローカルネットワークへのアクセス許可を求められることがありますが、通信先はあなた自身のPCです。",
+    code: "コード:", failed: "Python の読み込みに失敗しました: ",
+  },
+  zh: {
+    uiLang: "界面语言", sample: "示例：", pick: "— 选择示例 —",
+    sub: "粘贴来自 Upwork、Fiverr、Freelancer.com、CrowdWorks、Lancers 或私信的招聘帖、客户消息（英文、日文、中文均可）。内容不会发送到任何服务器：检查在这个页面里运行（Pyodide 上的 Python），Gemma 在<b>你自己的</b>电脑上通过 Ollama 运行。",
+    s_wechat: "中文：加微信 + 先交培训费", s_upwork: "Upwork：让你加 WhatsApp", s_fiverr: "Fiverr：先要免费样稿",
+    s_line: "日文：拉你去 LINE", s_trial: "日文：无偿试稿", s_mule: "日文：代收转寄包裹",
+    s_scam: "日文：先交钱的“副业”", s_dev: "正常的 Upwork 开发单", s_ok: "正常的日文单子",
+    placeholder: "粘贴招聘帖或客户消息…", check: "检查", platform: "平台手续费：",
+    useGemma: "同时使用本机的 Gemma", loading: "正在加载 Python…", ready: "就绪：规则检查和报酬计算在本页面内运行。",
+    asking: "正在询问你电脑上的 {m}…", done: "完成", doneGemma: "完成：Gemma 在你的电脑上运行。",
+    noOllama: "连不上本机的 Ollama（{e}）。请看下方“连接本机的 Gemma”。",
+    connect: "连接本机的 Gemma",
+    connect1: "不用 Gemma 也能做规则检查和报酬计算。要加上带原文引用的 Gemma 判断，请在这台电脑上运行 Ollama，并允许本页面访问：",
+    connect2: "页面会从浏览器直接访问 <code>http://127.0.0.1:11434</code>。浏览器可能会询问是否允许访问本地网络，这个请求只发到你自己的电脑，不经过互联网。",
+    code: "代码：", failed: "Python 加载失败：",
+  },
+};
 const $ = (id) => document.getElementById(id);
-let py;
+let py, ui = "en";
+
+function pickLang() {
+  const h = location.hash.match(/lang=(en|ja|zh)/);
+  if (h) return h[1];
+  const saved = localStorage.getItem("gigguard.lang");
+  if (I18N[saved]) return saved;
+  const n = (navigator.languages && navigator.languages[0]) || navigator.language || "en";
+  return n.startsWith("zh") ? "zh" : n.startsWith("ja") ? "ja" : "en";
+}
+function tr(key, vars) {
+  let s = I18N[ui][key] || I18N.en[key] || key;
+  for (const k in vars || {}) s = s.replace("{" + k + "}", vars[k]);
+  return s;
+}
+function applyLang(lang) {
+  ui = lang;
+  document.documentElement.lang = lang === "zh" ? "zh-CN" : lang;
+  $("uiLang").value = lang;
+  document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = tr(el.dataset.i18n); });
+  document.querySelectorAll("[data-i18n-html]").forEach((el) => { el.innerHTML = tr(el.dataset.i18nHtml); });
+  $("text").placeholder = tr("placeholder");
+  if (!py) $("status").textContent = tr("loading");
+  else if (!$("out").hidden) $("check").click();   // re-render the result in the new language
+  else $("status").textContent = tr("ready");
+}
+$("uiLang").onchange = (e) => { localStorage.setItem("gigguard.lang", e.target.value); applyLang(e.target.value); };
 
 async function boot() {
   py = await loadPyodide();
@@ -86,10 +167,11 @@ async function boot() {
     py.FS.writeFile("/app/gigguard/" + f, src);
   }
   py.runPython(`
-import sys, json
+import sys
 sys.path.insert(0, "/app")
 from gigguard.analyze import analyze
 from gigguard.render import text_report
+from gigguard.pay import PLATFORM_FEES
 from gigguard import llm
 
 class Prefetched:
@@ -101,8 +183,6 @@ class Prefetched:
             raise RuntimeError(self.err)
         return self.raw
 
-from gigguard.pay import PLATFORM_FEES
-
 def run(text, lang, model_name=None, raw=None, err=None, seconds=None, platform="direct"):
     m = Prefetched(model_name, raw, err) if model_name else None
     rep = analyze(text, model=m, fee_rate=PLATFORM_FEES.get(platform, 0.0))
@@ -110,46 +190,47 @@ def run(text, lang, model_name=None, raw=None, err=None, seconds=None, platform=
         rep.model_seconds = round(seconds, 1)
     return text_report(rep, lang)
 `);
-  $("status").textContent = "準備OK / ready (rules + pay math run in this tab)";
+  $("status").textContent = tr("ready");
   $("check").disabled = false;
   const m = location.hash.match(/sample=(\w+)/);
   if (m && SAMPLES[m[1]]) { $("sample").value = m[1]; $("text").value = SAMPLES[m[1]]; $("check").click(); }
 }
 
 async function askOllama(model, text) {
-  const system = py.globals.get("llm").SYSTEM_PROMPT;
-  const user = py.globals.get("llm").build_user_prompt(text);
+  const llm = py.globals.get("llm");
   const res = await fetch("http://127.0.0.1:11434/api/chat", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({model, stream: false, format: "json", think: false,
       options: {temperature: 0.1, num_ctx: 4096},
-      messages: [{role: "system", content: system}, {role: "user", content: user}]}),
+      messages: [{role: "system", content: llm.SYSTEM_PROMPT}, {role: "user", content: llm.build_user_prompt(text)}]}),
   });
   if (!res.ok) throw new Error("Ollama HTTP " + res.status);
   return (await res.json()).message.content;
 }
 
+// The last Gemma answer is cached so switching the UI language re-renders without asking again.
+let last = {text: null, model: null, raw: null, err: null, secs: null};
 $("sample").onchange = (e) => { if (SAMPLES[e.target.value]) $("text").value = SAMPLES[e.target.value]; };
 $("check").onclick = async () => {
   const text = $("text").value;
-  if (!text.trim()) return;
-  const lang = $("lang").value;
-  let model = null, raw = null, err = null;
-  if ($("useGemma").checked) {
-    model = $("model").value;
-    $("status").textContent = model + " に問い合わせ中… / asking " + model + " on your machine…";
-    var t0 = performance.now();
+  if (!text.trim() || !py) return;
+  const model = $("useGemma").checked ? $("model").value : null;
+  if (model && (last.text !== text || last.model !== model)) {
+    $("status").textContent = tr("asking", {m: model});
+    const t0 = performance.now();
+    let raw = null, err = null;
     try { raw = await askOllama(model, text); }
-    catch (e) { err = "could not reach local Ollama (" + e.message + "). See 'Connect your local Gemma' below."; }
+    catch (e) { err = tr("noOllama", {e: e.message}); }
+    last = {text, model, raw, err, secs: (performance.now() - t0) / 1000};
   }
-  const run = py.globals.get("run");
-  const secs = model ? (performance.now() - t0) / 1000 : null;
-  $("out").textContent = run(text, lang, model, raw, err, secs, $("platform").value);
+  const g = model ? last : {raw: null, err: null, secs: null};
+  $("out").textContent = py.globals.get("run")(text, ui, model, g.raw, g.err, g.secs, $("platform").value);
   $("out").hidden = false;
-  $("status").textContent = model && !err ? "done: Gemma ran on your machine" : "done";
+  $("status").textContent = model && !g.err ? tr("doneGemma") : tr("done");
 };
-boot().catch((e) => { $("status").textContent = "failed to load Python: " + e; });
+applyLang(pickLang());
+boot().catch((e) => { $("status").textContent = tr("failed") + e; });
 </script>
 </body>
 </html>

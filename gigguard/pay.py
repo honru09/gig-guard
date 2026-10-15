@@ -109,7 +109,13 @@ def _foreign(t: str):
         if m:
             cur, hourly = "CNY", _to_float(m.group(1) or m.group(2))
         else:
-            amounts = [_to_float(m.group(1)) * (10_000 if m.group(2) else 1) for m in _CNY.finditer(t)]
+            amounts = [
+                _to_float(m.group(1)) * (10_000 if m.group(2) else 1)
+                for m in _CNY.finditer(t)
+                # money the worker would PAY (先交200元培训费) is not the reward
+                if not re.match(r"\s*(培训费|押金|保证金|会费|入会费|激活费)", t[m.end():])
+                and not re.search(r"(交|付|缴)\s*$", t[max(0, m.start() - 3):m.start()])
+            ]
             if amounts:
                 cur, total = "CNY", max(amounts)
     if cur is None:

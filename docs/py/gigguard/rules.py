@@ -239,3 +239,16 @@ def max_severity(levels) -> str:
         if SEVERITY_ORDER.get(lv, 0) > SEVERITY_ORDER[best]:
             best = lv
     return best
+
+
+# Chinese titles and advice, keyed by rule id (used by the report renderer).
+RULE_ZH = {
+    "off_platform_contact": ("把沟通引到平台外", "Upwork、Fiverr、CrowdWorks 等大多数平台都禁止把沟通或付款转到平台外。请在平台内回复，不要点链接。"),
+    "upfront_payment": ("要求接单者先付钱", "接活还要先交钱的，几乎都是骗局或卖课。不要付款。"),
+    "unpaid_trial": ("无偿测试 / 免费样稿", "无偿测试是白嫖正式工作量的常见套路。可以要求改成小额付费测试。"),
+    "personal_documents": ("过早索要证件或银行信息", "签约前不要发身份证、银行卡或社保号等信息，报酬可以通过平台收取。"),
+    "too_good_to_be_true": ("高收入诱饵", "“轻松日入几百”“手机就能月入几万”是副业骗局的惯用话术。"),
+    "crypto_investment": ("投资 / 虚拟币 / 刷单", "可能是披着兼职外衣的投资诱导或刷单骗局。"),
+    "ai_banned": ("禁止使用 AI", "对方明确禁止使用 AI。如果你打算用 AI 干活，这单最好放弃。"),
+    "rushed_pressure": ("催促马上决定", "“马上回复”“今天之内”这种催促会让你没时间思考，冷静核对条件再说。"),
+}

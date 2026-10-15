@@ -21,3 +21,19 @@ class WebDemoTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class DemoI18n(unittest.TestCase):
+    def test_ui_languages_and_samples(self):
+        import re
+        html = (ROOT / "docs" / "index.html").read_text(encoding="utf-8")
+        self.assertIn('localStorage.getItem("gigguard.lang")', html)
+        self.assertIn("navigator.language", html)
+        for lang in ("en", "ja", "zh"):
+            self.assertIn(f'<option value="{lang}">', html)
+        keys = set(re.findall(r'data-i18n(?:-html)?="(\w+)"', html))
+        for block in re.findall(r"\n  (en|ja|zh): \{(.*?)\n  \},", html, re.S):
+            have = set(re.findall(r"(\w+):", block[1]))
+            self.assertFalse(keys - have, f"{block[0]} missing {keys - have}")
+        self.assertIn('value="wechat"', html)
+        self.assertIn("wechat:", html)
