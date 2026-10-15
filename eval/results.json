@@ -1,0 +1,2045 @@
+{
+ "summaries": [
+  {
+   "config": "rules only",
+   "risky_caught": 8,
+   "risky_total": 14,
+   "safe_false_flags": 1,
+   "safe_total": 6,
+   "category_hits": 7,
+   "category_total": 15,
+   "model_only_catches": 0
+  },
+  {
+   "config": "rules + gemma3:1b",
+   "risky_caught": 8,
+   "risky_total": 14,
+   "safe_false_flags": 2,
+   "safe_total": 6,
+   "category_hits": 11,
+   "category_total": 15,
+   "model_only_catches": 0,
+   "json_ok": 19,
+   "n": 20,
+   "findings_verified": 56,
+   "findings_rejected": 5,
+   "median_seconds": 10.1
+  },
+  {
+   "config": "rules + gemma3:4b",
+   "risky_caught": 14,
+   "risky_total": 14,
+   "safe_false_flags": 1,
+   "safe_total": 6,
+   "category_hits": 11,
+   "category_total": 15,
+   "model_only_catches": 6,
+   "json_ok": 20,
+   "n": 20,
+   "findings_verified": 13,
+   "findings_rejected": 0,
+   "median_seconds": 32.2
+  },
+  {
+   "config": "rules + gemma4:e2b",
+   "risky_caught": 12,
+   "risky_total": 14,
+   "safe_false_flags": 1,
+   "safe_total": 6,
+   "category_hits": 12,
+   "category_total": 15,
+   "model_only_catches": 4,
+   "json_ok": 20,
+   "n": 20,
+   "findings_verified": 23,
+   "findings_rejected": 0,
+   "median_seconds": 27.9
+  },
+  {
+   "config": "rules + gemma4:e4b",
+   "risky_caught": 13,
+   "risky_total": 14,
+   "safe_false_flags": 1,
+   "safe_total": 6,
+   "category_hits": 12,
+   "category_total": 15,
+   "model_only_catches": 5,
+   "json_ok": 18,
+   "n": 20,
+   "findings_verified": 17,
+   "findings_rejected": 0,
+   "median_seconds": 33.4
+  }
+ ],
+ "rows": {
+  "rules only": [
+   {
+    "id": "r01",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "off_platform_contact"
+    ],
+    "found": [
+     "off_platform_contact",
+     "rushed_pressure"
+    ],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": null,
+    "seconds": null,
+    "summary_en": null
+   },
+   {
+    "id": "r02",
+    "label": "risky",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [
+     "off_platform_contact"
+    ],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": null,
+    "seconds": null,
+    "summary_en": null
+   },
+   {
+    "id": "r03",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "off_platform_contact"
+    ],
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": null,
+    "seconds": null,
+    "summary_en": null
+   },
+   {
+    "id": "r04",
+    "label": "risky",
+    "risk": "medium",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "unpaid_trial"
+    ],
+    "found": [
+     "unpaid_trial"
+    ],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": null,
+    "seconds": null,
+    "summary_en": null
+   },
+   {
+    "id": "r05",
+    "label": "risky",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [
+     "unpaid_trial"
+    ],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": null,
+    "seconds": null,
+    "summary_en": null
+   },
+   {
+    "id": "r06",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "upfront_payment",
+     "too_good_to_be_true"
+    ],
+    "found": [
+     "too_good_to_be_true",
+     "upfront_payment"
+    ],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": null,
+    "seconds": null,
+    "summary_en": null
+   },
+   {
+    "id": "r07",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "personal_documents"
+    ],
+    "found": [
+     "personal_documents"
+    ],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": null,
+    "seconds": null,
+    "summary_en": null
+   },
+   {
+    "id": "r08",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "crypto_investment"
+    ],
+    "found": [
+     "crypto_investment"
+    ],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": null,
+    "seconds": null,
+    "summary_en": null
+   },
+   {
+    "id": "r09",
+    "label": "risky",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [
+     "illegal_or_mule"
+    ],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": null,
+    "seconds": null,
+    "summary_en": null
+   },
+   {
+    "id": "r10",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "illegal_or_mule"
+    ],
+    "found": [
+     "personal_documents"
+    ],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": null,
+    "seconds": null,
+    "summary_en": null
+   },
+   {
+    "id": "r11",
+    "label": "risky",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [
+     "illegal_or_mule"
+    ],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": null,
+    "seconds": null,
+    "summary_en": null
+   },
+   {
+    "id": "r12",
+    "label": "risky",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [
+     "illegal_or_mule"
+    ],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": null,
+    "seconds": null,
+    "summary_en": null
+   },
+   {
+    "id": "r13",
+    "label": "risky",
+    "risk": "medium",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "low_pay"
+    ],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": null,
+    "seconds": null,
+    "summary_en": null
+   },
+   {
+    "id": "r14",
+    "label": "risky",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [
+     "off_platform_contact"
+    ],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": null,
+    "seconds": null,
+    "summary_en": null
+   },
+   {
+    "id": "s01",
+    "label": "safe",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": null,
+    "seconds": null,
+    "summary_en": null
+   },
+   {
+    "id": "s02",
+    "label": "safe",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": null,
+    "seconds": null,
+    "summary_en": null
+   },
+   {
+    "id": "s03",
+    "label": "safe",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [],
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": null,
+    "seconds": null,
+    "summary_en": null
+   },
+   {
+    "id": "s04",
+    "label": "safe",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": null,
+    "seconds": null,
+    "summary_en": null
+   },
+   {
+    "id": "s05",
+    "label": "safe",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": null,
+    "seconds": null,
+    "summary_en": null
+   },
+   {
+    "id": "s06",
+    "label": "safe",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": null,
+    "seconds": null,
+    "summary_en": null
+   }
+  ],
+  "rules + gemma3:1b": [
+   {
+    "id": "r01",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "off_platform_contact"
+    ],
+    "found": [
+     "off_platform_contact",
+     "rushed_pressure"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 10.8,
+    "summary_en": "1-2 sentences in English"
+   },
+   {
+    "id": "r02",
+    "label": "risky",
+    "risk": "low",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [
+     "off_platform_contact"
+    ],
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 7.1,
+    "summary_en": "1-2 sentences in English"
+   },
+   {
+    "id": "r03",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "off_platform_contact"
+    ],
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 7.5,
+    "summary_en": "1-2 sentences in English"
+   },
+   {
+    "id": "r04",
+    "label": "risky",
+    "risk": "medium",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "unpaid_trial"
+    ],
+    "found": [
+     "off_platform_contact",
+     "unpaid_trial"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 18.2,
+    "summary_en": "We are recruiting plant staff. We require all applicants to complete a trial period before hiring. The trial is free of charge (no payment is made). The document is 4 pages, and the estimated work time is 3-4 hours."
+   },
+   {
+    "id": "r05",
+    "label": "risky",
+    "risk": "low",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [
+     "unpaid_trial"
+    ],
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 8.3,
+    "summary_en": "1-2 sentences in English"
+   },
+   {
+    "id": "r06",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "upfront_payment",
+     "too_good_to_be_true"
+    ],
+    "found": [
+     "off_platform_contact",
+     "too_good_to_be_true",
+     "upfront_payment"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 7.4,
+    "summary_en": "1-2 sentences in English"
+   },
+   {
+    "id": "r07",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "personal_documents"
+    ],
+    "found": [
+     "ai_banned",
+     "crypto_investment",
+     "illegal_or_mule",
+     "low_pay",
+     "off_platform_contact",
+     "other",
+     "personal_documents",
+     "rushed_pressure",
+     "too_good_to_be_true",
+     "upfront_payment",
+     "vague_scope"
+    ],
+    "verified": 11,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 66.9,
+    "summary_en": "The job is data entry work. Please send the photo and national ID card of your driver's license for verification before the contract."
+   },
+   {
+    "id": "r08",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "crypto_investment"
+    ],
+    "found": [
+     "crypto_investment",
+     "off_platform_contact"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 14.3,
+    "summary_en": "1-2 sentences in English"
+   },
+   {
+    "id": "r09",
+    "label": "risky",
+    "risk": "low",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [
+     "illegal_or_mule"
+    ],
+    "found": [
+     "ai_banned",
+     "crypto_investment",
+     "illegal_or_mule",
+     "low_pay",
+     "off_platform_contact",
+     "other",
+     "personal_documents",
+     "rushed_pressure",
+     "unpaid_trial",
+     "upfront_payment",
+     "vague_scope"
+    ],
+    "verified": 11,
+    "rejected": 1,
+    "rejected_quotes": [
+     "他の条件はありません。"
+    ],
+    "json_ok": true,
+    "error": null,
+    "seconds": 51.2,
+    "summary_en": "You will only need to send the package directly to the specified address and receive 1 yen for each package."
+   },
+   {
+    "id": "r10",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "illegal_or_mule"
+    ],
+    "found": [
+     "off_platform_contact",
+     "personal_documents"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 6.7,
+    "summary_en": "1-2 sentences in English"
+   },
+   {
+    "id": "r11",
+    "label": "risky",
+    "risk": "low",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [
+     "illegal_or_mule"
+    ],
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 10.5,
+    "summary_en": "Write a review for a specified product on Amazon, and write a 5-star review. After the full payment, we will refund the entire amount and pay you 1,000 yen."
+   },
+   {
+    "id": "r12",
+    "label": "risky",
+    "risk": "low",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [
+     "illegal_or_mule"
+    ],
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 8.8,
+    "summary_en": "1-2 sentences in English"
+   },
+   {
+    "id": "r13",
+    "label": "risky",
+    "risk": "medium",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "low_pay"
+    ],
+    "found": [
+     "low_pay",
+     "off_platform_contact",
+     "other",
+     "personal_documents",
+     "rushed_pressure",
+     "unpaid_trial",
+     "upfront_payment",
+     "vague_scope"
+    ],
+    "verified": 8,
+    "rejected": 4,
+    "rejected_quotes": [
+     "他の作業はしません。",
+     "投資はしません。",
+     "AIは使います。",
+     "他の作業はしません。"
+    ],
+    "json_ok": true,
+    "error": null,
+    "seconds": 29.2,
+    "summary_en": "Please transcribe a 60-minute audio recording. The payment is 300 yen. The estimated work time is 4 hours."
+   },
+   {
+    "id": "r14",
+    "label": "risky",
+    "risk": "low",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [
+     "off_platform_contact"
+    ],
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 7.3,
+    "summary_en": "1-2 sentences in English"
+   },
+   {
+    "id": "s01",
+    "label": "safe",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": "model reply was not usable JSON",
+    "seconds": 120.0,
+    "summary_en": null
+   },
+   {
+    "id": "s02",
+    "label": "safe",
+    "risk": "low",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 7.1,
+    "summary_en": "The illustration will feature 8 different cat characters, priced at 20,000 yen per set. Please submit the rough draft here in the message."
+   },
+   {
+    "id": "s03",
+    "label": "safe",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [],
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 8.5,
+    "summary_en": "1-2 sentences in English"
+   },
+   {
+    "id": "s04",
+    "label": "safe",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 17.4,
+    "summary_en": "Please perform a minor bug fix for the Spring Boot API. We are providing a GitHub repository with a 30,000 yen payment and an estimated 6-hour work time."
+   },
+   {
+    "id": "s05",
+    "label": "safe",
+    "risk": "medium",
+    "flagged": true,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [
+     "ai_banned",
+     "crypto_investment",
+     "illegal_or_mule",
+     "low_pay",
+     "off_platform_contact",
+     "other",
+     "personal_documents",
+     "rushed_pressure",
+     "too_good_to_be_true",
+     "unpaid_trial",
+     "upfront_payment",
+     "vague_scope"
+    ],
+    "verified": 12,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 41.7,
+    "summary_en": "SEO article (転職ジャンル). Approximately 3000 words per article. The outline will be prepared here, and a writing guideline will be provided."
+   },
+   {
+    "id": "s06",
+    "label": "safe",
+    "risk": "low",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 9.7,
+    "summary_en": "1-2 sentences in English"
+   }
+  ],
+  "rules + gemma3:4b": [
+   {
+    "id": "r01",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "off_platform_contact"
+    ],
+    "found": [
+     "off_platform_contact",
+     "rushed_pressure"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 34.3,
+    "summary_en": "The job posting requests adding a LINE account for screening, which is a red flag."
+   },
+   {
+    "id": "r02",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": false,
+    "expected": [
+     "off_platform_contact"
+    ],
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 27.9,
+    "summary_en": "Thank you for your application. Detailed job information will be sent via Instagram DM."
+   },
+   {
+    "id": "r03",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "off_platform_contact"
+    ],
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 27.9,
+    "summary_en": "The recruiter is requesting communication via Telegram, indicating a potential attempt to move the conversation off the platform."
+   },
+   {
+    "id": "r04",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "unpaid_trial"
+    ],
+    "found": [
+     "unpaid_trial"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 23.6,
+    "summary_en": "This job requests a free trial period before hiring, which is a common tactic in scams."
+   },
+   {
+    "id": "r05",
+    "label": "risky",
+    "risk": "medium",
+    "flagged": true,
+    "rule_flagged": false,
+    "expected": [
+     "unpaid_trial"
+    ],
+    "found": [
+     "unpaid_trial"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 41.7,
+    "summary_en": "The job involves a test article writing task with no payment for the test, but offers ongoing projects, requiring caution."
+   },
+   {
+    "id": "r06",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "upfront_payment",
+     "too_good_to_be_true"
+    ],
+    "found": [
+     "too_good_to_be_true",
+     "upfront_payment"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 40.1,
+    "summary_en": "The job requires purchasing an expensive manual upfront, which is a common red flag for scams."
+   },
+   {
+    "id": "r07",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "personal_documents"
+    ],
+    "found": [
+     "personal_documents"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 55.5,
+    "summary_en": "The client requests photos of a driver's license and the front of a My Number card before the contract, which is a high-risk request for personal information."
+   },
+   {
+    "id": "r08",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "crypto_investment"
+    ],
+    "found": [
+     "crypto_investment"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 39.2,
+    "summary_en": "The job involves purchasing cryptocurrency and sending screenshots, which is a high-risk activity and potentially a scam."
+   },
+   {
+    "id": "r09",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": false,
+    "expected": [
+     "illegal_or_mule"
+    ],
+    "found": [
+     "illegal_or_mule"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 35.1,
+    "summary_en": "This job involves forwarding packages received at your home for 3,000 yen per shipment."
+   },
+   {
+    "id": "r10",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "illegal_or_mule"
+    ],
+    "found": [
+     "personal_documents"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 35.0,
+    "summary_en": "The request involves purchasing unused bank accounts and asking for personal information, which is a significant risk."
+   },
+   {
+    "id": "r11",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": false,
+    "expected": [
+     "illegal_or_mule"
+    ],
+    "found": [
+     "too_good_to_be_true"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 49.9,
+    "summary_en": "This job asks for a product review on Amazon, but the payment terms are suspicious."
+   },
+   {
+    "id": "r12",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": false,
+    "expected": [
+     "illegal_or_mule"
+    ],
+    "found": [
+     "too_good_to_be_true"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 34.3,
+    "summary_en": "The job involves purchasing SNS accounts for 10,000+ followers, offering 10,000 yen per account just for login information."
+   },
+   {
+    "id": "r13",
+    "label": "risky",
+    "risk": "medium",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "low_pay"
+    ],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 30.1,
+    "summary_en": "This job involves transcribing a 60-minute audio recording. The payment is 300 yen, and the estimated work time is around 4 hours."
+   },
+   {
+    "id": "r14",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": false,
+    "expected": [
+     "off_platform_contact"
+    ],
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 38.4,
+    "summary_en": "The client is proposing off-platform transactions and requesting their email address."
+   },
+   {
+    "id": "s01",
+    "label": "safe",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 28.4,
+    "summary_en": "This job involves researching pet-related stores and entering information into a spreadsheet. The payment is 3,000 yen, and a preliminary online meeting will be held."
+   },
+   {
+    "id": "s02",
+    "label": "safe",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 22.1,
+    "summary_en": "This is a request to create 8 cat character illustrations as a set, with a payment of 20,000 yen per set."
+   },
+   {
+    "id": "s03",
+    "label": "safe",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [],
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 28.7,
+    "summary_en": "This job involves creating content for restaurant social media accounts, with a monthly fee of ¥15,000 and approximately 5 hours of work per month."
+   },
+   {
+    "id": "s04",
+    "label": "safe",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 17.6,
+    "summary_en": "You've been asked to fix a minor bug in a Spring Boot API. The estimated hours and payment are provided."
+   },
+   {
+    "id": "s05",
+    "label": "safe",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 22.1,
+    "summary_en": "This is a job for creating SEO articles in the job recruitment category. The client will provide the outline and writing guidelines."
+   },
+   {
+    "id": "s06",
+    "label": "safe",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 25.5,
+    "summary_en": "This is a translation job from English to Japanese for a brochure of approximately 2,000 words with a 1-week deadline."
+   }
+  ],
+  "rules + gemma4:e2b": [
+   {
+    "id": "r01",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "off_platform_contact"
+    ],
+    "found": [
+     "off_platform_contact",
+     "rushed_pressure"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 37.7,
+    "summary_en": "The request is for creating a store list, but they are asking to add a LINE for screening. Be cautious as they are requesting contact off-platform."
+   },
+   {
+    "id": "r02",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": false,
+    "expected": [
+     "off_platform_contact"
+    ],
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 23.8,
+    "summary_en": "The client is asking for detailed job information via direct message on Instagram. This is a red flag as it moves communication off the platform."
+   },
+   {
+    "id": "r03",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "off_platform_contact"
+    ],
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 27.4,
+    "summary_en": "The recruiter is asking for communication via Telegram, which is a red flag for moving off-platform."
+   },
+   {
+    "id": "r04",
+    "label": "risky",
+    "risk": "medium",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "unpaid_trial"
+    ],
+    "found": [
+     "unpaid_trial"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 20.8,
+    "summary_en": "This is a recruitment post for planting staff, requiring everyone to complete a free trial before hiring. The work time is about 3 to 4 hours."
+   },
+   {
+    "id": "r05",
+    "label": "risky",
+    "risk": "low",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [
+     "unpaid_trial"
+    ],
+    "found": [
+     "unpaid_trial"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 28.6,
+    "summary_en": "They are looking for a test writing task of 5000 characters. The test article will not be paid, but if successful, there will be ongoing projects."
+   },
+   {
+    "id": "r06",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "upfront_payment",
+     "too_good_to_be_true"
+    ],
+    "found": [
+     "too_good_to_be_true",
+     "upfront_payment"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 28.3,
+    "summary_en": "This job asks for the purchase of an expensive manual/training material to start working, indicating a high risk of a scam or overcharging."
+   },
+   {
+    "id": "r07",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "personal_documents"
+    ],
+    "found": [
+     "personal_documents"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 23.2,
+    "summary_en": "This is a data entry job, but they are asking for photos of a driver's license and My Number card for identity verification before the contract. This is very dangerous."
+   },
+   {
+    "id": "r08",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "crypto_investment"
+    ],
+    "found": [
+     "crypto_investment"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 29.3,
+    "summary_en": "This job asks you to create an account on a specified exchange, buy a small amount of cryptocurrency, and send a screenshot for 5,000 yen. This carries a very high risk of being a scam or illegal activity."
+   },
+   {
+    "id": "r09",
+    "label": "risky",
+    "risk": "low",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [
+     "illegal_or_mule"
+    ],
+    "found": [
+     "other"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 30.3,
+    "summary_en": "The client is asking for help with receiving and forwarding packages from their home to a specified address. The pay is 3,000 yen per item."
+   },
+   {
+    "id": "r10",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "illegal_or_mule"
+    ],
+    "found": [
+     "illegal_or_mule",
+     "other",
+     "personal_documents"
+    ],
+    "verified": 2,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 32.2,
+    "summary_en": "The client is offering to buy unused bank accounts and is asking the worker to mail the cash card and passbook."
+   },
+   {
+    "id": "r11",
+    "label": "risky",
+    "risk": "medium",
+    "flagged": true,
+    "rule_flagged": false,
+    "expected": [
+     "illegal_or_mule"
+    ],
+    "found": [
+     "unpaid_trial"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 24.0,
+    "summary_en": "This job involves purchasing an Amazon product and writing a 5-star review. Although the product cost will be refunded later, the compensation is only 1,000 yen."
+   },
+   {
+    "id": "r12",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": false,
+    "expected": [
+     "illegal_or_mule"
+    ],
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 27.3,
+    "summary_en": "The client is asking to buy an SNS account with over 1000 followers and is requesting login information. This is highly likely to be an account selling scam."
+   },
+   {
+    "id": "r13",
+    "label": "risky",
+    "risk": "medium",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "low_pay"
+    ],
+    "found": [
+     "low_pay"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 27.5,
+    "summary_en": "The client is requesting transcription of a 60-minute audio and survey answers. The compensation is 300 yen, expecting about 4 hours of work."
+   },
+   {
+    "id": "r14",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": false,
+    "expected": [
+     "off_platform_contact"
+    ],
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 30.4,
+    "summary_en": "The client is proposing direct transactions off-platform and asking for an email address. This poses a risk to platform terms."
+   },
+   {
+    "id": "s01",
+    "label": "safe",
+    "risk": "low",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [
+     "upfront_payment"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 23.5,
+    "summary_en": "This job involves researching about 20 pet-related stores and inputting the name, address, and URL into a spreadsheet. There will be a 15-minute online briefing initially."
+   },
+   {
+    "id": "s02",
+    "label": "safe",
+    "risk": "low",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [
+     "upfront_payment"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 34.4,
+    "summary_en": "This is a request to create 8 types of cat character LINE stickers. They are asking for a rough draft submission."
+   },
+   {
+    "id": "s03",
+    "label": "safe",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [],
+    "found": [
+     "off_platform_contact",
+     "other"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 23.8,
+    "summary_en": "This job involves creating distribution texts for a LINE official account for a restaurant, twice a week. The monthly fee is 15,000 yen, with about 5 hours of work per month."
+   },
+   {
+    "id": "s04",
+    "label": "safe",
+    "risk": "low",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [
+     "other",
+     "upfront_payment"
+    ],
+    "verified": 2,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 19.7,
+    "summary_en": "The client is asking for a minor bug fix in a Spring Boot API. A GitHub repository is provided along with a fee and estimated time."
+   },
+   {
+    "id": "s05",
+    "label": "safe",
+    "risk": "low",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [
+     "other"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 32.8,
+    "summary_en": "The client is requesting the creation of an SEO article about a career change genre. They have specified the word count rate and article length."
+   },
+   {
+    "id": "s06",
+    "label": "safe",
+    "risk": "low",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [
+     "rushed_pressure",
+     "upfront_payment"
+    ],
+    "verified": 2,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 34.4,
+    "summary_en": "The client is requesting an English to Japanese translation of a tourist pamphlet. A fee and deadline are provided."
+   }
+  ],
+  "rules + gemma4:e4b": [
+   {
+    "id": "r01",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "off_platform_contact"
+    ],
+    "found": [
+     "off_platform_contact",
+     "rushed_pressure"
+    ],
+    "verified": 2,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 103.7,
+    "summary_en": "The client is asking applicants to add their LINE account for a screening questionnaire. They are also strongly pressuring for immediate response."
+   },
+   {
+    "id": "r02",
+    "label": "risky",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [
+     "off_platform_contact"
+    ],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": "HTTPError: HTTP Error 500: Internal Server Error",
+    "seconds": 99.9,
+    "summary_en": null
+   },
+   {
+    "id": "r03",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "off_platform_contact"
+    ],
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": false,
+    "error": "HTTPError: HTTP Error 500: Internal Server Error",
+    "seconds": 19.5,
+    "summary_en": null
+   },
+   {
+    "id": "r04",
+    "label": "risky",
+    "risk": "medium",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "unpaid_trial"
+    ],
+    "found": [
+     "unpaid_trial"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 83.1,
+    "summary_en": "Recruiting typesetting staff, requiring a free trial before hiring. The task involves 4 spread pages and takes about 3-4 hours."
+   },
+   {
+    "id": "r05",
+    "label": "risky",
+    "risk": "medium",
+    "flagged": true,
+    "rule_flagged": false,
+    "expected": [
+     "unpaid_trial"
+    ],
+    "found": [
+     "unpaid_trial"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 36.7,
+    "summary_en": "This is a recruitment for an article writer, starting with a test writing piece that is unpaid. Successful completion may lead to ongoing projects."
+   },
+   {
+    "id": "r06",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "upfront_payment",
+     "too_good_to_be_true"
+    ],
+    "found": [
+     "too_good_to_be_true",
+     "upfront_payment"
+    ],
+    "verified": 2,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 47.0,
+    "summary_en": "It promises over 300,000 yen per month with just a smartphone, but demands a high upfront fee for training materials before starting work."
+   },
+   {
+    "id": "r07",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "personal_documents"
+    ],
+    "found": [
+     "personal_documents"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 33.1,
+    "summary_en": "This is a data entry job, but the client is asking for copies of a driver's license and My Number card before the contract."
+   },
+   {
+    "id": "r08",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "crypto_investment"
+    ],
+    "found": [
+     "crypto_investment",
+     "too_good_to_be_true"
+    ],
+    "verified": 2,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 34.9,
+    "summary_en": "This job involves opening an account on a specified exchange, purchasing a small amount of cryptocurrency, and submitting a screenshot for a ¥5,000 payment."
+   },
+   {
+    "id": "r09",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": false,
+    "expected": [
+     "illegal_or_mule"
+    ],
+    "found": [
+     "illegal_or_mule"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 33.7,
+    "summary_en": "The client is asking you to receive packages at your home and forward them to a specified address for ¥3,000 per item."
+   },
+   {
+    "id": "r10",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "illegal_or_mule"
+    ],
+    "found": [
+     "illegal_or_mule",
+     "personal_documents"
+    ],
+    "verified": 1,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 29.4,
+    "summary_en": "This is a request to buy unused bank accounts. It asks for the mailing of the cash card and bankbook."
+   },
+   {
+    "id": "r11",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": false,
+    "expected": [
+     "illegal_or_mule"
+    ],
+    "found": [
+     "low_pay",
+     "too_good_to_be_true"
+    ],
+    "verified": 2,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 50.0,
+    "summary_en": "This job requires purchasing a specified product on Amazon and posting a 5-star review. The product cost will be refunded later, and a reward of 1,000 yen will be paid."
+   },
+   {
+    "id": "r12",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": false,
+    "expected": [
+     "illegal_or_mule"
+    ],
+    "found": [
+     "illegal_or_mule",
+     "off_platform_contact"
+    ],
+    "verified": 2,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 44.6,
+    "summary_en": "This job is to buy SNS accounts with over 1000 followers. It asks for login information."
+   },
+   {
+    "id": "r13",
+    "label": "risky",
+    "risk": "medium",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [
+     "low_pay"
+    ],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 23.2,
+    "summary_en": "The client is asking for transcription of a 60-minute audio file and survey answering. The compensation is 300 yen."
+   },
+   {
+    "id": "r14",
+    "label": "risky",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": false,
+    "expected": [
+     "off_platform_contact"
+    ],
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 2,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 37.5,
+    "summary_en": "The client is suggesting an off-platform transaction due to fees and is asking for your email address."
+   },
+   {
+    "id": "s01",
+    "label": "safe",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 24.3,
+    "summary_en": "This task involves researching about 20 pet-related stores and inputting the name, address, and URL into a spreadsheet. The fixed reward is 3,000 yen, and there is an initial online briefing."
+   },
+   {
+    "id": "s02",
+    "label": "safe",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 26.2,
+    "summary_en": "This is a request to create LINE sticker illustrations featuring a cat character. The job is for 8 types at a price of 20,000 yen."
+   },
+   {
+    "id": "s03",
+    "label": "safe",
+    "risk": "high",
+    "flagged": true,
+    "rule_flagged": true,
+    "expected": [],
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 25.8,
+    "summary_en": "This job involves managing a restaurant's LINE official account, requiring the creation of two posts per week. The compensation is ¥15,000 per month for about 5 hours of work."
+   },
+   {
+    "id": "s04",
+    "label": "safe",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 19.8,
+    "summary_en": "The client is requesting minor bug fixes for a Spring Boot API. Providing a GitHub repository is assumed."
+   },
+   {
+    "id": "s05",
+    "label": "safe",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 22.2,
+    "summary_en": "This is a request to write SEO articles in the job change genre. The structure and writing guidelines will be provided."
+   },
+   {
+    "id": "s06",
+    "label": "safe",
+    "risk": "none",
+    "flagged": false,
+    "rule_flagged": false,
+    "expected": [],
+    "found": [],
+    "verified": 0,
+    "rejected": 0,
+    "rejected_quotes": [],
+    "json_ok": true,
+    "error": null,
+    "seconds": 20.7,
+    "summary_en": "This is a translation job from English to Japanese for a tourist pamphlet. The compensation is 24,000 JPY with a one-week deadline."
+   }
+  ]
+ }
+}

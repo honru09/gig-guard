@@ -1,9 +1,8 @@
-"""Tiny Ollama client (stdlib only) and the prompt for the nuanced read.
+"""Ollama client (stdlib only), the Gemma prompt, and strict parsing of its JSON.
 
-The model is asked for strict JSON. Small local models sometimes wrap JSON in
-prose or code fences, so parse_model_json() digs the first object out and
-validates every field; anything unusable becomes None and the rule layer stands
-on its own.
+Gemma is asked for structured findings, each tied to an exact quote from the
+post. parse_model_json() only validates *shape*; analyze.ground_findings() then
+checks every quote against the post and throws away the ones that are not there.
 """
 
 from __future__ import annotations
@@ -11,35 +10,64 @@ from __future__ import annotations
 import json
 import os
 import re
+import time
 import urllib.error
 import urllib.request
 from typing import Optional, Protocol
 
 DEFAULT_HOST = os.environ.get("OLLAMA_HOST", "http://127.0.0.1:11434")
-DEFAULT_MODEL = os.environ.get("GIGGUARD_MODEL", "gemma3:4b")
+DEFAULT_MODEL = os.environ.get("GIGGUARD_MODEL", "gemma4:e4b")
 
-SYSTEM_PROMPT = """あなたは日本のクラウドソーシング（クラウドワークス、ランサーズ、ココナラ等）で働くフリーランスの相談役です。
-受け取った案件文・クライアントのメッセージを読み、応募者の立場で分析してください。
+CATEGORIES = (
+    "off_platform_contact",
+    "upfront_payment",
+    "unpaid_trial",
+    "personal_documents",
+    "too_good_to_be_true",
+    "crypto_investment",
+    "ai_banned",
+    "rushed_pressure",
+    "illegal_or_mule",
+    "vague_scope",
+    "low_pay",
+    "other",
+)
+_RISKS = ("low", "medium", "high")
 
-必ず次のJSONだけを返してください（説明文やコードブロックは不要）:
+SYSTEM_PROMPT = """You are a careful advisor for freelancers who take small jobs on Japanese crowdsourcing sites
+(CrowdWorks / クラウドワークス, Lancers / ランサーズ, Coconala / ココナラ). Read the job post or client
+message (usually Japanese) from the worker's side and return ONLY this JSON:
+
 {
   "risk": "low" | "medium" | "high",
-  "summary_ja": "案件の中身を1〜2文で",
-  "concerns_ja": ["気になる点", ...],
-  "questions_ja": ["応募前にクライアントに確認すべき質問", ...],
-  "reply_ja": "サイト内メッセージでそのまま送れる丁寧な返信文"
+  "job_type_en": "a few words, e.g. 'store list research'",
+  "summary_ja": "1-2 sentences in natural Japanese",
+  "summary_en": "1-2 sentences in English",
+  "findings": [
+    {
+      "category": one of %s,
+      "severity": "low" | "medium" | "high",
+      "quote": "an EXACT substring copied from the post, 4-40 characters",
+      "why_ja": "short reason in Japanese",
+      "why_en": "short reason in English"
+    }
+  ],
+  "questions_ja": ["polite questions to ask the client before accepting"],
+  "reply_ja": "a polite reply the worker can send inside the platform's message system"
 }
 
-判断のルール:
-- LINE・Telegram・メール等、サイト外での連絡に誘導するのは規約違反で、詐欺の典型です（risk は high）。
-- 応募者にお金を払わせる、身分証や口座を早く求める、投資や仮想通貨の話は high。
-- 無報酬のテストは medium 以上。
-- 返信文はサイト内でのやり取りを前提にし、外部リンクを開かない・個人情報を送らない内容にしてください。
-- 返信文には LINE などの外部ツール名、URL、連絡先を書かないでください。
-- 怪しい場合の返信は、角が立たない形で「サイト内でのやり取り」「有償テスト」等を提案してください。
-"""
-
-_RISKS = ("low", "medium", "high")
+Rules:
+- Every finding MUST quote the post exactly. If you cannot quote it, do not report it.
+- Moving contact off the platform (LINE, Instagram DM, Telegram, email, phone) breaks the platform's
+  terms and is the usual first step of a scam: high.
+- The worker paying anything, early ID / bank / My Number requests, investment or crypto: high.
+- Forwarding parcels, lending or opening accounts, buying/selling accounts, posting fake reviews,
+  receiving and re-sending money: illegal_or_mule, high.
+- Unpaid tests: medium. Pay far below minimum wage: low_pay, medium.
+- Normal jobs are normal. Words like オンライン, ガイドライン, LINEスタンプ, or a Google Meet briefing
+  are not red flags. If nothing is wrong, return an empty findings list and risk "low".
+- reply_ja must not mention LINE or any outside tool, URL, phone number or e-mail address.
+""" % (", ".join(f'"{c}"' for c in CATEGORIES))
 
 
 class ChatModel(Protocol):
@@ -49,8 +77,9 @@ class ChatModel(Protocol):
 
 
 class OllamaModel:
-    def __init__(self, model: str = DEFAULT_MODEL, host: str = DEFAULT_HOST, timeout: float = 180.0):
+    def __init__(self, model: str = DEFAULT_MODEL, host: str = DEFAULT_HOST, timeout: float = 300.0, retries: int = 2):
         self.name = model
+        self.retries = retries
         self.host = host.rstrip("/")
         self.timeout = timeout
 
@@ -60,7 +89,8 @@ class OllamaModel:
                 "model": self.name,
                 "stream": False,
                 "format": "json",
-                "options": {"temperature": 0.2},
+                "think": False,
+                "options": {"temperature": 0.1, "num_ctx": 4096},
                 "messages": [
                     {"role": "system", "content": system},
                     {"role": "user", "content": user},
@@ -70,9 +100,19 @@ class OllamaModel:
         req = urllib.request.Request(
             self.host + "/api/chat", data=body, headers={"Content-Type": "application/json"}
         )
-        with urllib.request.urlopen(req, timeout=self.timeout) as resp:
-            data = json.load(resp)
-        return data.get("message", {}).get("content", "")
+        last: Exception | None = None
+        for attempt in range(self.retries + 1):
+            try:
+                with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+                    data = json.load(resp)
+                return data.get("message", {}).get("content", "")
+            except urllib.error.HTTPError as e:
+                # Ollama answers 500 while it is still swapping a model into memory
+                if e.code < 500 or attempt == self.retries:
+                    raise
+                last = e
+                time.sleep(2 * (attempt + 1))
+        raise last  # pragma: no cover
 
     def available(self) -> bool:
         try:
@@ -113,12 +153,40 @@ def _first_json_object(text: str) -> Optional[str]:
     return None
 
 
+def _s(v) -> Optional[str]:
+    return v.strip() if isinstance(v, str) and v.strip() else None
+
+
 def _str_list(v) -> list[str]:
     if isinstance(v, str):
         v = [v]
     if not isinstance(v, list):
         return []
     return [s.strip() for s in v if isinstance(s, str) and s.strip()][:6]
+
+
+def _findings(v) -> list[dict]:
+    out = []
+    if not isinstance(v, list):
+        return out
+    for f in v[:12]:
+        if not isinstance(f, dict):
+            continue
+        quote = _s(f.get("quote"))
+        if not quote:
+            continue
+        cat = str(f.get("category", "other")).strip()
+        sev = str(f.get("severity", "")).strip().lower()
+        out.append(
+            {
+                "category": cat if cat in CATEGORIES else "other",
+                "severity": sev if sev in _RISKS else "low",
+                "quote": quote,
+                "why_ja": _s(f.get("why_ja")),
+                "why_en": _s(f.get("why_en")),
+            }
+        )
+    return out
 
 
 def parse_model_json(raw: str) -> Optional[dict]:
@@ -135,18 +203,19 @@ def parse_model_json(raw: str) -> Optional[dict]:
     risk = str(data.get("risk", "")).strip().lower()
     out = {
         "risk": risk if risk in _RISKS else None,
-        "summary_ja": data.get("summary_ja") if isinstance(data.get("summary_ja"), str) else None,
-        "concerns_ja": _str_list(data.get("concerns_ja")),
+        "job_type_en": _s(data.get("job_type_en")),
+        "summary_ja": _s(data.get("summary_ja")),
+        "summary_en": _s(data.get("summary_en")),
+        "findings": _findings(data.get("findings")),
         "questions_ja": _str_list(data.get("questions_ja")),
-        "reply_ja": data.get("reply_ja") if isinstance(data.get("reply_ja"), str) else None,
+        "reply_ja": _s(data.get("reply_ja")),
     }
-    if not any([out["risk"], out["summary_ja"], out["concerns_ja"], out["reply_ja"]]):
+    if not any([out["risk"], out["summary_ja"], out["summary_en"], out["findings"], out["reply_ja"]]):
         return None
     return out
 
 
-def build_user_prompt(text: str, rule_titles: list[str]) -> str:
-    hint = ""
-    if rule_titles:
-        hint = "\n\n（参考: ルールチェックで検出済みの項目: " + "、".join(rule_titles) + "）"
-    return "次の案件文・メッセージを分析してください。\n\n---\n" + text.strip() + "\n---" + hint
+def build_user_prompt(text: str) -> str:
+    # Rule hits are deliberately NOT passed in: the model reads the post cold, so
+    # what it finds is an independent second opinion (and evals measure it fairly).
+    return "Job post / client message:\n<<<\n" + text.strip() + "\n>>>"

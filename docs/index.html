@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>gig-guard: check a freelance job post before you reply</title>
+<meta name="description" content="Paste a Japanese freelance job post. Rules + Gemma, running in your browser and on your own machine.">
+<style>
+:root{--fg:#1f2328;--muted:#59636e;--bg:#f6f8fa;--line:#d1d9e0;--accent:#0969da}
+body{font-family:system-ui,"Hiragino Sans","Noto Sans JP",sans-serif;max-width:900px;margin:2rem auto;padding:0 1rem;color:var(--fg);line-height:1.55}
+h1{margin-bottom:.2rem}
+.sub{color:var(--muted);margin-top:0}
+textarea{width:100%;height:11rem;font:inherit;padding:.6rem;box-sizing:border-box;border:1px solid var(--line);border-radius:6px}
+button,select{font:inherit;padding:.45rem 1rem;border-radius:6px;border:1px solid var(--line);background:#fff;cursor:pointer}
+button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin:.6rem 0}
+pre{font-size:14.5px;font-family:ui-monospace,"Noto Sans Mono CJK JP",monospace;white-space:pre-wrap;background:var(--bg);padding:1rem;border-radius:8px}
+details{background:var(--bg);padding:.6rem 1rem;border-radius:8px;margin:1rem 0}
+code{background:var(--bg);padding:0 .25rem;border-radius:4px}
+small,.muted{color:var(--muted)}
+#status{font-size:.9rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<h1>gig-guard</h1>
+<p class="sub">案件文・クライアントのメッセージを貼り付けてチェック。<br>
+Paste a Japanese freelance job post or client message. Nothing is sent to any server: the checker runs in this tab (Python via Pyodide), and Gemma runs on <b>your</b> machine through Ollama.</p>
+
+<div class="row">
+  <label>サンプル / sample:
+  <select id="sample">
+    <option value="">—</option>
+    <option value="line">LINE に誘導 / move to LINE</option>
+    <option value="trial">無償トライアル / unpaid trial</option>
+    <option value="mule">荷物の転送 / parcel forwarding</option>
+    <option value="scam">情報商材 / pay-to-work</option>
+    <option value="ok">普通の案件 / normal job</option>
+  </select></label>
+</div>
+<textarea id="text" placeholder="例: ご応募ありがとうございます。詳細はLINEでお伝えします…"></textarea>
+<div class="row">
+  <button class="primary" id="check" disabled>チェック / Check</button>
+  <label><input type="checkbox" id="useGemma"> ローカルの Gemma も使う / also ask my local Gemma</label>
+  <select id="model"><option>gemma4:e4b</option><option>gemma4:e2b</option><option>gemma3:4b</option></select>
+  <select id="lang"><option value="both">日本語 + English</option><option value="ja">日本語</option><option value="en">English</option></select>
+</div>
+<div id="status">Python を読み込み中… / loading Python…</div>
+<pre id="out" hidden></pre>
+
+<details>
+<summary>ローカルの Gemma をつなぐ / Connect your local Gemma</summary>
+<p>Without Gemma you get the rule checks and the pay math. To add Gemma's grounded findings, run Ollama on this computer and allow this page as an origin:</p>
+<pre>ollama pull gemma4:e4b
+OLLAMA_ORIGINS=https://honru09.github.io ollama serve</pre>
+<p class="muted">The page then calls <code>http://127.0.0.1:11434</code> directly from your browser. Your browser may ask whether this site may access devices on your local network: that request goes to your own machine, not to the internet.</p>
+</details>
+
+<p class="muted">Code: <a href="https://github.com/honru09/gig-guard">github.com/honru09/gig-guard</a> · CLI and local web UI: <code>python -m gigguard serve</code></p>
+
+<script src="https://cdn.jsdelivr.net/pyodide/v314.0.7/full/pyodide.js"></script>
+<script>
+const FILES = ["__init__.py", "rules.py", "pay.py", "llm.py", "analyze.py", "render.py"];
+const SAMPLES = {
+  line: "【関東エリア】焼肉店の営業リスト作成（未経験OK）\n\nご応募ありがとうございます！\n選考のため、まずはこちらのアンケートにご回答ください。\n詳細はLINEでお伝えしますので、下記から友だち追加をお願いします。\nhttps://lin.ee/XXXXXXX\n本日中にご連絡いただけた方を優先いたします。",
+  trial: "漫画の多言語写植（英語・中国語）スタッフ募集\n\n採用前に、全員にトライアルをお願いしております。\nトライアルは無償となります（報酬は発生しません）。\n見開き4ページ分の写植をお願いします。作業時間は3〜4時間程度を想定しています。\nなお、AIツールの使用は禁止です。",
+  mule: "在宅で荷物の受け取りと転送をお願いします。ご自宅に届いた荷物を、指定の住所へそのまま発送していただくだけで1件3,000円です。",
+  scam: "★スマホ1台で月30万円以上稼げる★ 誰でも簡単な在宅ワーク\n\n1日30分の作業だけでOK！\nまずは専用マニュアルをご購入いただき（教材費 29,800円）、\nその後は仮想通貨の自動売買ツールを使うだけです。",
+  ok: "店舗リサーチ・リスト作成のお仕事\n\nペット関連のお店を20件ほど調べて、スプレッドシートに店名・住所・URL・営業時間を入力していただきます。\n報酬：固定 3,000円\n作業時間の目安：2時間程度\n初回のみオンラインで15分ほど説明会を行います（Google Meet）。",
+};
+const $ = (id) => document.getElementById(id);
+let py;
+
+async function boot() {
+  py = await loadPyodide();
+  py.FS.mkdirTree("/app/gigguard");
+  for (const f of FILES) {
+    const src = await (await fetch("py/gigguard/" + f)).text();
+    py.FS.writeFile("/app/gigguard/" + f, src);
+  }
+  py.runPython(`
+import sys, json
+sys.path.insert(0, "/app")
+from gigguard.analyze import analyze
+from gigguard.render import text_report
+from gigguard import llm
+
+class Prefetched:
+    """The browser already asked Ollama; hand its raw reply to the same analyze()."""
+    def __init__(self, name, raw, err=None):
+        self.name, self.raw, self.err = name, raw, err
+    def chat(self, system, user):
+        if self.err:
+            raise RuntimeError(self.err)
+        return self.raw
+
+def run(text, lang, model_name=None, raw=None, err=None, seconds=None):
+    m = Prefetched(model_name, raw, err) if model_name else None
+    rep = analyze(text, model=m)
+    if m is not None and seconds is not None:
+        rep.model_seconds = round(seconds, 1)
+    return text_report(rep, lang)
+`);
+  $("status").textContent = "準備OK / ready (rules + pay math run in this tab)";
+  $("check").disabled = false;
+  const m = location.hash.match(/sample=(\w+)/);
+  if (m && SAMPLES[m[1]]) { $("sample").value = m[1]; $("text").value = SAMPLES[m[1]]; $("check").click(); }
+}
+
+async function askOllama(model, text) {
+  const system = py.globals.get("llm").SYSTEM_PROMPT;
+  const user = py.globals.get("llm").build_user_prompt(text);
+  const res = await fetch("http://127.0.0.1:11434/api/chat", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({model, stream: false, format: "json", think: false,
+      options: {temperature: 0.1, num_ctx: 4096},
+      messages: [{role: "system", content: system}, {role: "user", content: user}]}),
+  });
+  if (!res.ok) throw new Error("Ollama HTTP " + res.status);
+  return (await res.json()).message.content;
+}
+
+$("sample").onchange = (e) => { if (SAMPLES[e.target.value]) $("text").value = SAMPLES[e.target.value]; };
+$("check").onclick = async () => {
+  const text = $("text").value;
+  if (!text.trim()) return;
+  const lang = $("lang").value;
+  let model = null, raw = null, err = null;
+  if ($("useGemma").checked) {
+    model = $("model").value;
+    $("status").textContent = model + " に問い合わせ中… / asking " + model + " on your machine…";
+    var t0 = performance.now();
+    try { raw = await askOllama(model, text); }
+    catch (e) { err = "could not reach local Ollama (" + e.message + "). See 'Connect your local Gemma' below."; }
+  }
+  const run = py.globals.get("run");
+  const secs = model ? (performance.now() - t0) / 1000 : null;
+  $("out").textContent = run(text, lang, model, raw, err, secs);
+  $("out").hidden = false;
+  $("status").textContent = model && !err ? "done: Gemma ran on your machine" : "done";
+};
+boot().catch((e) => { $("status").textContent = "failed to load Python: " + e; });
+</script>
+</body>
+</html>

@@ -21,6 +21,7 @@ class Rule:
     title_en: str
     advice_ja: str
     patterns: tuple[str, ...]
+    advice_en: str = ""
 
 
 @dataclass
@@ -31,6 +32,7 @@ class Hit:
     title_en: str
     advice_ja: str
     evidence: list[str] = field(default_factory=list)
+    advice_en: str = ""
 
     def to_dict(self) -> dict:
         return {
@@ -39,6 +41,7 @@ class Hit:
             "title_ja": self.title_ja,
             "title_en": self.title_en,
             "advice_ja": self.advice_ja,
+            "advice_en": self.advice_en,
             "evidence": self.evidence,
         }
 
@@ -160,6 +163,13 @@ RULES: tuple[Rule, ...] = (
 )
 
 
+_ADVICE_EN = {'off_platform_contact': "CrowdWorks/Lancers forbid moving contact off the platform. Reply inside the site and don't open the link.", 'upfront_payment': "A job you have to pay for is almost always a scam or an info-product sale. Don't pay.", 'unpaid_trial': 'Unpaid tests are a classic way to get real work for free. Ask for a small paid test contract.', 'personal_documents': "Don't send ID, bank details or My Number before a contract. The platform handles payment.", 'too_good_to_be_true': "'Anyone can earn ¥300k a month on a phone' is stock side-hustle-scam wording.", 'crypto_investment': 'Possibly an investment pitch or self-affiliate scheme dressed up as a job.', 'ai_banned': 'AI tools are explicitly banned. If you planned to use AI, skip this one.', 'rushed_pressure': "'Today only / first come' pressure takes away your time to think. Check the terms calmly."}
+RULES = tuple(
+    Rule(r.id, r.severity, r.title_ja, r.title_en, r.advice_ja, r.patterns, _ADVICE_EN.get(r.id, ""))
+    for r in RULES
+)
+
+
 def normalize(text: str) -> str:
     """NFKC-normalize so full-width ＬＩＮＥ / ０-９ match the same rules."""
     return unicodedata.normalize("NFKC", text)
@@ -191,7 +201,7 @@ def scan(text: str, rules: tuple[Rule, ...] = RULES) -> list[Hit]:
                 break
         if evidence:
             hits.append(
-                Hit(rule.id, rule.severity, rule.title_ja, rule.title_en, rule.advice_ja, evidence)
+                Hit(rule.id, rule.severity, rule.title_ja, rule.title_en, rule.advice_ja, evidence, rule.advice_en)
             )
     return hits
 
