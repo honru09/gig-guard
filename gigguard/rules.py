@@ -65,6 +65,13 @@ RULES: tuple[Rule, ...] = (
             r"(chatwork|チャットワーク)\s*(で|に|へ|を)",
             r"(gmail|メール|e-?mail)\s*(アドレス)?\s*(で|に|へ)\s*(連絡|送|返信|やり取り)",
             r"(外部|別の?)\s*(ツール|アプリ|サイト)\s*(で|に|へ)",
+            '(whatsapp|telegram|signal|wechat|skype|google\\s*chat|hangouts)\\b',
+            '(contact|message|text|reach|add)\\s+me\\s+(on|via|at)\\s+(whatsapp|telegram|signal|wechat|skype|discord|gmail|email|my\\s+(email|number|phone))',
+            '(outside|off)\\s+(of\\s+)?(upwork|fiverr|freelancer|the\\s+platform|the\\s+site|this\\s+site)',
+            '(avoid|skip|save\\s+on)\\s+(the\\s+)?(platform|upwork|fiverr|service)\\s+fees?',
+            '(加|添加|联系)\\s*(我的?)?\\s*(微信|威信|vx|VX|QQ|电报|飞机|whatsapp)',
+            '(微信|vx|QQ|电报)\\s*(号|ID|联系|沟通|详聊|私聊)',
+            '(平台外|站外|私下)\\s*(联系|交易|沟通)',
         ),
     ),
     Rule(
@@ -79,6 +86,9 @@ RULES: tuple[Rule, ...] = (
             r"(マニュアル|教材|ツール)\s*(を|の)?\s*(購入|ご購入|買って)",
             r"(registration|starter|training)\s+fee",
             r"pay\s+(a|the)?\s*(small\s+)?(fee|deposit)",
+            '(pay|purchase|buy)\\s+(for\\s+)?(the\\s+|a\\s+)?(training|starter\\s+kit|software\\s+license|equipment|onboarding)',
+            '(refundable\\s+)?(deposit|activation\\s+fee|membership\\s+fee)',
+            '(押金|保证金|培训费|会费|入会费|激活费|先交|先付)',
         ),
     ),
     Rule(
@@ -93,6 +103,10 @@ RULES: tuple[Rule, ...] = (
             r"(テスト|トライアル|試作|課題)\s*(は|につきましては)?\s*(無償|無料|報酬なし|報酬は発生しません|報酬対象外)",
             r"unpaid\s+(test|trial|sample)",
             r"(test|trial)\s+(task\s+)?(is\s+)?unpaid",
+            '(free|unpaid)\\s+(sample|test\\s+task|trial\\s+task|test\\s+project)',
+            '(test|trial|sample)\\s+(task|work|project)?\\s*(will\\s+)?(not\\s+be\\s+paid|is\\s+not\\s+paid|without\\s+pay)',
+            '(免费|无偿|不付费|没有报酬)\\s*(的)?\\s*(试稿|试译|测试|试用|样稿)',
+            '(试稿|试译|测试|样稿)\\s*(是|为)?\\s*(免费|无偿|不付费|没有报酬)',
         ),
     ),
     Rule(
@@ -107,6 +121,9 @@ RULES: tuple[Rule, ...] = (
             r"(銀行|口座)\s*(番号|情報)?\s*(を|の)?\s*(教え|送|記入|入力|提出)",
             r"(暗証番号|キャッシュカード)",
             r"(passport|driver'?s\s+licen[cs]e|bank\s+account)\s+(photo|copy|number|details)",
+            '\\b(ssn|social\\s+security\\s+number)\\b',
+            '(send|share|upload)\\s+(me\\s+)?(a\\s+)?(photo|copy|scan)\\s+of\\s+your\\s+(id|passport|driver)',
+            '(身份证|银行卡号|银行卡密码|护照)\\s*(照片|号码|复印件|发给|提供)?',
         ),
     ),
     Rule(
@@ -122,6 +139,10 @@ RULES: tuple[Rule, ...] = (
             r"(月|月収)\s*[0-9０-９]+\s*万\s*(円)?\s*(以上|保証|確実|稼げ)",
             r"(即日|すぐに)\s*(高収入|稼げ)",
             r"(guaranteed|easy)\s+(income|money)",
+            '(earn|make)\\s+\\$?[0-9,]+\\s*(\\+\\s*)?(per|a|/)\\s*(day|week)\\s+(from\\s+home|easily|with\\s+no\\s+experience)',
+            'no\\s+experience\\s+(needed|required).{0,30}\\$[0-9,]{3,}',
+            '(日赚|日入|月入)\\s*[0-9]+',
+            '(轻松|躺着)\\s*(赚|月入|日入)',
         ),
     ),
     Rule(
@@ -134,6 +155,7 @@ RULES: tuple[Rule, ...] = (
             r"(仮想通貨|暗号資産|FX|バイナリー|NFT|ウォレット)",
             r"(自己アフィリ|セルフバック|口座開設).{0,10}(報酬|案件)",
             r"(crypto|wallet\s+address|usdt|binance)",
+            '(刷单|虚拟币|数字货币|USDT|炒币)',
         ),
     ),
     Rule(
@@ -147,6 +169,8 @@ RULES: tuple[Rule, ...] = (
             r"(AI|ＡＩ)\s*(を)?\s*(使った|使用した|利用した)\s*(作業|納品|文章|原稿)\s*(は)?\s*(禁止|不可|NG|お断り)",
             r"no\s+(ai|chatgpt)",
             r"(ai|chatgpt)[- ]generated\s+(content|work|text)\s+(is\s+)?(not\s+allowed|prohibited|banned)",
+            '(禁止|不得|不能|不允许)\\s*(使用)?\\s*(AI|人工智能|ChatGPT)',
+            '(AI|人工智能)\\s*(生成|写作)?\\s*(的)?\\s*(内容)?\\s*(禁止|不可|不接受)',
         ),
     ),
     Rule(
@@ -158,12 +182,15 @@ RULES: tuple[Rule, ...] = (
         (
             r"(本日中|今日中|至急|先着\s*[0-9０-９]*\s*名|今すぐ)\s*(に)?\s*(ご連絡|返信|登録|追加|決め|お願い|限定)",
             r"(reply|respond|decide)\s+(within|in)\s+[0-9]+\s+(minutes|hours)",
+            '(urgent|asap|immediately).{0,20}(reply|respond|confirm|send)',
+            '(reply|respond|confirm)\\s+(asap|immediately|urgently|right\\s+away)',
+            '(今天之内|马上|立即)\\s*(回复|联系|添加|确认)',
         ),
     ),
 )
 
 
-_ADVICE_EN = {'off_platform_contact': "CrowdWorks/Lancers forbid moving contact off the platform. Reply inside the site and don't open the link.", 'upfront_payment': "A job you have to pay for is almost always a scam or an info-product sale. Don't pay.", 'unpaid_trial': 'Unpaid tests are a classic way to get real work for free. Ask for a small paid test contract.', 'personal_documents': "Don't send ID, bank details or My Number before a contract. The platform handles payment.", 'too_good_to_be_true': "'Anyone can earn ¥300k a month on a phone' is stock side-hustle-scam wording.", 'crypto_investment': 'Possibly an investment pitch or self-affiliate scheme dressed up as a job.', 'ai_banned': 'AI tools are explicitly banned. If you planned to use AI, skip this one.', 'rushed_pressure': "'Today only / first come' pressure takes away your time to think. Check the terms calmly."}
+_ADVICE_EN = {'off_platform_contact': "Upwork, Fiverr, CrowdWorks and most platforms forbid moving contact or payment off-platform. Reply inside the site and don't open the link.", 'upfront_payment': "A job you have to pay for is almost always a scam or an info-product sale. Don't pay.", 'unpaid_trial': 'Unpaid tests are a classic way to get real work for free. Ask for a small paid test contract.', 'personal_documents': "Don't send ID, bank details or My Number before a contract. The platform handles payment.", 'too_good_to_be_true': "'Anyone can earn ¥300k a month on a phone' is stock side-hustle-scam wording.", 'crypto_investment': 'Possibly an investment pitch or self-affiliate scheme dressed up as a job.', 'ai_banned': 'AI tools are explicitly banned. If you planned to use AI, skip this one.', 'rushed_pressure': "'Reply ASAP / today only' pressure takes away your time to think. Check the terms calmly."}
 RULES = tuple(
     Rule(r.id, r.severity, r.title_ja, r.title_en, r.advice_ja, r.patterns, _ADVICE_EN.get(r.id, ""))
     for r in RULES

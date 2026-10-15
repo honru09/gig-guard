@@ -1,0 +1,15 @@
+🟡 MEDIUM  条件を確認してから / Check the terms first
+
+■ ルールで検出 / Rule hits
+  [medium] Unpaid test work / 無報酬のテスト・試作
+      「…please send a free sample with 3 concep…」
+      → 無償テストは本番作業を只でやらされる典型パターンです。報酬付きテスト（テスト契約）にできないか確認しましょう。
+      → Unpaid tests are a classic way to get real work for free. Ask for a small paid test contract.
+
+■ お金と時間 / Pay
+  報酬 / pay: $150.00  (after 0.0% fee: $150.00)
+  作業時間 / hours: ?
+  ・hours not stated (can't compute the effective hourly rate)
+
+■ 返信案 / reply to send on-platform (定型文 / template)
+  Thanks for the details. If the test involves real production work, could we set it up as a small paid milestone? Happy to start right away once that's in place.

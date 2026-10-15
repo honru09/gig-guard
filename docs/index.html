@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>gig-guard: check a freelance job post before you reply</title>
-<meta name="description" content="Paste a Japanese freelance job post. Rules + Gemma, running in your browser and on your own machine.">
+<title>gig-guard: scam & fit check for freelance gigs (EN / 日本語 / 中文)</title>
+<meta name="description" content="Paste a freelance gig post or client message (any platform, EN/JA/ZH). Rules + Gemma, running in your browser and on your own machine.">
 <style>
 :root{--fg:#1f2328;--muted:#59636e;--bg:#f6f8fa;--line:#d1d9e0;--accent:#0969da}
 body{font-family:system-ui,"Hiragino Sans","Noto Sans JP",sans-serif;max-width:900px;margin:2rem auto;padding:0 1rem;color:var(--fg);line-height:1.55}
@@ -23,8 +23,7 @@ small,.muted{color:var(--muted)}
 </head>
 <body>
 <h1>gig-guard</h1>
-<p class="sub">案件文・クライアントのメッセージを貼り付けてチェック。<br>
-Paste a Japanese freelance job post or client message. Nothing is sent to any server: the checker runs in this tab (Python via Pyodide), and Gemma runs on <b>your</b> machine through Ollama.</p>
+<p class="sub">Paste a gig post or client message from Upwork, Fiverr, Freelancer.com, CrowdWorks, Lancers or a DM, in English, 日本語 or 中文. Nothing is sent to any server: the checker runs in this tab (Python via Pyodide), and Gemma runs on <b>your</b> machine through Ollama.</p>
 
 <div class="row">
   <label>サンプル / sample:
@@ -34,7 +33,11 @@ Paste a Japanese freelance job post or client message. Nothing is sent to any se
     <option value="trial">無償トライアル / unpaid trial</option>
     <option value="mule">荷物の転送 / parcel forwarding</option>
     <option value="scam">情報商材 / pay-to-work</option>
-    <option value="ok">普通の案件 / normal job</option>
+    <option value="ok">普通の案件 / normal job (JA)</option>
+    <option value="upwork">Upwork: "contact me on WhatsApp" (EN)</option>
+    <option value="fiverr">Fiverr: free sample first (EN)</option>
+    <option value="wechat">加微信 + 培训费 (ZH)</option>
+    <option value="dev">Normal Upwork dev job (EN)</option>
   </select></label>
 </div>
 <textarea id="text" placeholder="例: ご応募ありがとうございます。詳細はLINEでお伝えします…"></textarea>
@@ -42,7 +45,8 @@ Paste a Japanese freelance job post or client message. Nothing is sent to any se
   <button class="primary" id="check" disabled>チェック / Check</button>
   <label><input type="checkbox" id="useGemma"> ローカルの Gemma も使う / also ask my local Gemma</label>
   <select id="model"><option>gemma4:e4b</option><option>gemma4:e2b</option><option>gemma3:4b</option></select>
-  <select id="lang"><option value="both">日本語 + English</option><option value="ja">日本語</option><option value="en">English</option></select>
+  <select id="lang"><option value="all">EN + 日本語 + 中文</option><option value="en">English</option><option value="ja">日本語</option><option value="zh">中文</option></select>
+  <select id="platform"><option value="direct">direct (0%)</option><option value="upwork">Upwork (~10%)</option><option value="fiverr">Fiverr (20%)</option><option value="freelancer">Freelancer.com (10%)</option><option value="crowdworks">CrowdWorks (20%)</option><option value="lancers">Lancers (16.5%)</option><option value="coconala">Coconala (22%)</option></select>
 </div>
 <div id="status">Python を読み込み中… / loading Python…</div>
 <pre id="out" hidden></pre>
@@ -65,6 +69,10 @@ const SAMPLES = {
   trial: "漫画の多言語写植（英語・中国語）スタッフ募集\n\n採用前に、全員にトライアルをお願いしております。\nトライアルは無償となります（報酬は発生しません）。\n見開き4ページ分の写植をお願いします。作業時間は3〜4時間程度を想定しています。\nなお、AIツールの使用は禁止です。",
   mule: "在宅で荷物の受け取りと転送をお願いします。ご自宅に届いた荷物を、指定の住所へそのまま発送していただくだけで1件3,000円です。",
   scam: "★スマホ1台で月30万円以上稼げる★ 誰でも簡単な在宅ワーク\n\n1日30分の作業だけでOK！\nまずは専用マニュアルをご購入いただき（教材費 29,800円）、\nその後は仮想通貨の自動売買ツールを使うだけです。",
+  upwork: "Hi! I reviewed your profile and you are a great fit for our data entry project.\nIt pays $35/hr, flexible hours, no experience needed.\nUpwork fees are high, so please contact me on WhatsApp +1 (555) 010-2299 to continue the interview.\nWe will send you a check to buy the equipment from our vendor. Please reply ASAP.",
+  fiverr: "Hello, I need a logo for my coffee brand. Before I place the order, please send a free sample with 3 concepts so I can choose the best designer.\nIf I like it I will order your premium package ($150).",
+  wechat: "您好，看到您的简历，我们这边有个在家兼职，打字录入，日入300以上，轻松上手。\n具体详情加我微信 vx: abc123 详聊。入职需要先交200元培训费，培训后马上安排任务。",
+  dev: "We need a Spring Boot developer to fix a bug in our REST API (pagination returns duplicates).\nFixed price $200, estimated 4-6 hours. Repo access will be shared through GitHub once the contract starts.",
   ok: "店舗リサーチ・リスト作成のお仕事\n\nペット関連のお店を20件ほど調べて、スプレッドシートに店名・住所・URL・営業時間を入力していただきます。\n報酬：固定 3,000円\n作業時間の目安：2時間程度\n初回のみオンラインで15分ほど説明会を行います（Google Meet）。",
 };
 const $ = (id) => document.getElementById(id);
@@ -93,9 +101,11 @@ class Prefetched:
             raise RuntimeError(self.err)
         return self.raw
 
-def run(text, lang, model_name=None, raw=None, err=None, seconds=None):
+from gigguard.pay import PLATFORM_FEES
+
+def run(text, lang, model_name=None, raw=None, err=None, seconds=None, platform="direct"):
     m = Prefetched(model_name, raw, err) if model_name else None
-    rep = analyze(text, model=m)
+    rep = analyze(text, model=m, fee_rate=PLATFORM_FEES.get(platform, 0.0))
     if m is not None and seconds is not None:
         rep.model_seconds = round(seconds, 1)
     return text_report(rep, lang)
@@ -135,7 +145,7 @@ $("check").onclick = async () => {
   }
   const run = py.globals.get("run");
   const secs = model ? (performance.now() - t0) / 1000 : null;
-  $("out").textContent = run(text, lang, model, raw, err, secs);
+  $("out").textContent = run(text, lang, model, raw, err, secs, $("platform").value);
   $("out").hidden = false;
   $("status").textContent = model && !err ? "done: Gemma ran on your machine" : "done";
 };

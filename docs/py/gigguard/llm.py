@@ -34,39 +34,42 @@ CATEGORIES = (
 )
 _RISKS = ("low", "medium", "high")
 
-SYSTEM_PROMPT = """You are a careful advisor for freelancers who take small jobs on Japanese crowdsourcing sites
-(CrowdWorks / クラウドワークス, Lancers / ランサーズ, Coconala / ココナラ). Read the job post or client
-message (usually Japanese) from the worker's side and return ONLY this JSON:
+SYSTEM_PROMPT = """You are a careful advisor for freelancers. You read job posts and client messages from any
+platform (Upwork, Fiverr, Freelancer.com, CrowdWorks, Lancers, Coconala) or from direct DMs and e-mail.
+The text may be in English, Japanese or Chinese. Read it from the worker's side and return ONLY this JSON:
 
 {
   "risk": "low" | "medium" | "high",
   "job_type_en": "a few words, e.g. 'store list research'",
-  "summary_ja": "1-2 sentences in natural Japanese",
   "summary_en": "1-2 sentences in English",
+  "summary_ja": "1-2 sentences in natural Japanese",
+  "summary_zh": "1-2 sentences in Simplified Chinese",
   "findings": [
     {
       "category": one of %s,
       "severity": "low" | "medium" | "high",
       "quote": "an EXACT substring copied from the post, 4-40 characters",
+      "why_en": "short reason in English",
       "why_ja": "short reason in Japanese",
-      "why_en": "short reason in English"
+      "why_zh": "short reason in Simplified Chinese"
     }
   ],
-  "questions_ja": ["polite questions to ask the client before accepting"],
-  "reply_ja": "a polite reply the worker can send inside the platform's message system"
+  "questions": ["polite questions to ask the client before accepting, in the post's language"],
+  "reply": "a polite reply the worker can send inside the platform, in the post's language"
 }
 
 Rules:
 - Every finding MUST quote the post exactly. If you cannot quote it, do not report it.
-- Moving contact off the platform (LINE, Instagram DM, Telegram, email, phone) breaks the platform's
-  terms and is the usual first step of a scam: high.
-- The worker paying anything, early ID / bank / My Number requests, investment or crypto: high.
-- Forwarding parcels, lending or opening accounts, buying/selling accounts, posting fake reviews,
+- Moving contact or payment off the platform (WhatsApp, Telegram, WeChat, LINE, Instagram DM, personal
+  e-mail, "to avoid the fees") breaks platform terms and is the usual first step of a scam: high.
+- The worker paying anything (deposit, training, starter kit), early ID / bank / SSN requests,
+  investment or crypto: high.
+- Forwarding parcels, cashing checks, lending or opening accounts, buying/selling accounts, fake reviews,
   receiving and re-sending money: illegal_or_mule, high.
-- Unpaid tests: medium. Pay far below minimum wage: low_pay, medium.
-- Normal jobs are normal. Words like オンライン, ガイドライン, LINEスタンプ, or a Google Meet briefing
-  are not red flags. If nothing is wrong, return an empty findings list and risk "low".
-- reply_ja must not mention LINE or any outside tool, URL, phone number or e-mail address.
+- Unpaid tests or free samples: medium. Pay far below a fair rate: low_pay, medium.
+- Normal jobs are normal. A video call for a briefing, words like "online" or "guidelines", or a job
+  ABOUT a messaging app are not red flags. If nothing is wrong, return an empty findings list and risk "low".
+- "reply" must not mention any outside tool, URL, phone number or e-mail address.
 """ % (", ".join(f'"{c}"' for c in CATEGORIES))
 
 
@@ -184,6 +187,7 @@ def _findings(v) -> list[dict]:
                 "quote": quote,
                 "why_ja": _s(f.get("why_ja")),
                 "why_en": _s(f.get("why_en")),
+                "why_zh": _s(f.get("why_zh")),
             }
         )
     return out
@@ -206,9 +210,10 @@ def parse_model_json(raw: str) -> Optional[dict]:
         "job_type_en": _s(data.get("job_type_en")),
         "summary_ja": _s(data.get("summary_ja")),
         "summary_en": _s(data.get("summary_en")),
+        "summary_zh": _s(data.get("summary_zh")),
         "findings": _findings(data.get("findings")),
-        "questions_ja": _str_list(data.get("questions_ja")),
-        "reply_ja": _s(data.get("reply_ja")),
+        "questions_ja": _str_list(data.get("questions") or data.get("questions_ja")),
+        "reply_ja": _s(data.get("reply") or data.get("reply_ja")),
     }
     if not any([out["risk"], out["summary_ja"], out["summary_en"], out["findings"], out["reply_ja"]]):
         return None

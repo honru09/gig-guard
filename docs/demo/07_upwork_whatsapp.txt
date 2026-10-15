@@ -1,0 +1,25 @@
+🔴 HIGH  応募・返信は見送り推奨 / Don't apply or reply
+
+■ ルールで検出 / Rule hits
+  [high] Moves the conversation off the platform / プラットフォーム外での連絡に誘導
+      「…contact me on WhatsApp +1 (555) 010-…」
+      → クラウドワークス・ランサーズ等は規約で外部連絡を禁止しています。返信は必ずサイト内メッセージで行い、リンクは開かないでください。
+      → Upwork, Fiverr, CrowdWorks and most platforms forbid moving contact or payment off-platform. Reply inside the site and don't open the link.
+  [high] Asks the worker to pay first / 応募者側に支払いを要求
+      「…ou a check to buy the equipment from our vend…」
+      → 仕事を受けるためにお金を払う案件は、ほぼ詐欺か情報商材です。支払わないでください。
+      → A job you have to pay for is almost always a scam or an info-product sale. Don't pay.
+  [low] Pressure to decide fast / 急かし・即決の要求
+      「…endor. Please reply ASAP.」
+      → 「本日中」「先着」で急かすのは考える時間を奪う手口のことがあります。条件を落ち着いて確認しましょう。
+      → 'Reply ASAP / today only' pressure takes away your time to think. Check the terms calmly.
+
+■ お金と時間 / Pay
+  提示時給: $35.00
+  報酬 / pay: ?  (after 0.0% fee: ?)
+  作業時間 / hours: ?
+  実質時給 / effective hourly: $35.00  (floor $10.00)
+  ・hours not stated (can't compute the effective hourly rate)
+
+■ 返信案 / reply to send on-platform (定型文 / template)
+  Thank you for thinking of me, but I'll have to pass on this one. Best of luck with the project.

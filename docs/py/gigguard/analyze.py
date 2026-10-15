@@ -15,7 +15,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from . import llm as llm_mod
-from .pay import PayEstimate, estimate
+from .pay import DEFAULT_FLOORS, PayEstimate, estimate
 from .rules import Hit, SEVERITY_ORDER, max_severity, normalize, scan
 
 VERDICT_JA = {
@@ -41,6 +41,38 @@ UNPAID_TRIAL_JA = (
     "大変恐縮ですが、本番と同等の作業量となる場合は、少額でも有償のテスト契約として"
     "お願いできますでしょうか。ご検討いただけますと幸いです。"
 )
+DECLINE_JA = (
+    "ご連絡ありがとうございます。大変恐縮ですが、今回のお仕事は辞退させていただきます。"
+    "ご縁がありましたら、またよろしくお願いいたします。"
+)
+TEMPLATES = {
+    "en": {
+        "safe_decline": "Thanks for reaching out. To stay within the platform's terms, I'd like to keep all "
+                        "communication and payment in this message thread. Could you share the full details here?",
+        "unpaid_trial": "Thanks for the details. If the test involves real production work, could we set it up "
+                        "as a small paid milestone? Happy to start right away once that's in place.",
+        "decline": "Thank you for thinking of me, but I'll have to pass on this one. Best of luck with the project.",
+        "caution": "Thanks for the message. Before I accept, could you confirm the scope, the rate and how payment "
+                   "works, here in the platform's messages?",
+    },
+    "zh": {
+        "safe_decline": "您好，感谢联系。按照平台规定，沟通和付款希望都在平台内的消息里进行，能否在这里说明一下具体内容？",
+        "unpaid_trial": "您好，感谢说明。如果测试相当于正式工作量，能否设为一个小额的付费测试？确认后我马上开始。",
+        "decline": "您好，感谢您的邀请，不过这次我就不接了，祝项目顺利。",
+        "caution": "您好，接单前想先在平台消息里确认一下工作范围、报酬和付款方式，谢谢。",
+    },
+}
+
+
+def detect_lang(text: str) -> str:
+    """'ja' if there is kana, 'zh' if Han characters but no kana, else 'en'."""
+    if re.search(r"[\u3040-\u30ff]", text):
+        return "ja"
+    if re.search(r"[\u4e00-\u9fff]", text):
+        return "zh"
+    return "en"
+
+
 GENERIC_CAUTION_JA = (
     "ご連絡ありがとうございます。お引き受けする前に、作業内容・報酬・お支払い方法について、"
     "こちらのメッセージ機能で詳しく確認させていただけますでしょうか。よろしくお願いいたします。"
@@ -76,7 +108,7 @@ class Report:
     hits: list[Hit]
     pay: PayEstimate
     below_floor: Optional[bool]
-    min_hourly_yen: int
+    min_hourly_yen: float
     model: Optional[dict] = None
     model_name: Optional[str] = None
     model_seconds: Optional[float] = None
@@ -86,6 +118,7 @@ class Report:
     rejected_findings: list[dict] = field(default_factory=list)  # quotes not in the post
     reply_ja: Optional[str] = None
     reply_source: str = "template"
+    post_lang: str = "ja"
     notes: list[str] = field(default_factory=list)
 
     @property
@@ -112,13 +145,14 @@ class Report:
             "rejected_findings": self.rejected_findings,
             "reply_ja": self.reply_ja,
             "reply_source": self.reply_source,
+            "post_lang": self.post_lang,
             "notes": self.notes,
         }
 
 
 _REPLY_BLOCKLIST = re.compile(
     r"(https?://|lin\.ee|line\.me|t\.me/|\bLINE\b|(?<![ァ-ヶー])ライン|友だち追加|友達追加|"
-    r"telegram|テレグラム|whatsapp|discord|ディスコード|chatwork|チャットワーク|instagram|インスタ|"
+    r"telegram|テレグラム|whatsapp|wechat|微信|skype|discord|ディスコード|chatwork|チャットワーク|instagram|インスタ|"
     r"メールアドレス|電話番号|@gmail|口座番号|マイナンバー)",
     re.IGNORECASE,
 )
@@ -143,10 +177,12 @@ def analyze(
     text: str,
     model: Optional[llm_mod.ChatModel] = None,
     fee_rate: float = 0.20,
-    min_hourly_yen: int = 1200,
+    min_hourly_yen: Optional[float] = None,
 ) -> Report:
     hits = scan(text)
     pay = estimate(text, fee_rate=fee_rate)
+    if min_hourly_yen is None:
+        min_hourly_yen = DEFAULT_FLOORS.get(pay.currency, 0)
     rule_risk = max_severity(h.severity for h in hits)
 
     below_floor = None
@@ -175,7 +211,7 @@ def analyze(
         rep.findings, rep.rejected_findings = ground_findings(text, rep.model.get("findings", []))
         if rep.rejected_findings:
             rep.notes.append(
-                f"Gemma の指摘のうち {len(rep.rejected_findings)} 件は本文に引用が見つからないため破棄しました"
+                f"{len(rep.rejected_findings)} Gemma finding(s) dropped: quote not found in the post"
             )
         grounded = max_severity(f["severity"] for f in rep.findings)
         if SEVERITY_ORDER[grounded] > SEVERITY_ORDER[risk]:
@@ -185,7 +221,7 @@ def analyze(
             rep.model_overruled = True  # ...but never talk a rule hit down
     if below_floor and SEVERITY_ORDER[risk] < SEVERITY_ORDER["medium"]:
         risk = "medium"
-        rep.notes.append(f"実質時給が下限 {min_hourly_yen}円 を下回っています")
+        rep.notes.append(f"effective hourly rate is below your floor ({min_hourly_yen:g} {pay.currency})")
     rep.risk = risk
     rep.verdict_ja = VERDICT_JA[risk]
     rep.verdict_en = VERDICT_EN[risk]
@@ -196,14 +232,26 @@ def analyze(
     model_reply = (rep.model or {}).get("reply_ja")
     # Once anything fires, the reply is a fixed, reviewed template. Small models
     # tend to be polite to a fault ("the unpaid trial is fine, thank you!").
-    if (ids | cats) & _HARD_CATEGORIES:
-        rep.reply_ja = SAFE_DECLINE_JA
-    elif "unpaid_trial" in ids | cats:
-        rep.reply_ja = UNPAID_TRIAL_JA
+    found = ids | cats
+    lang = detect_lang(text)
+    rep.post_lang = lang
+
+    def tpl(key: str) -> str:
+        if lang == "ja":
+            return {"safe_decline": SAFE_DECLINE_JA, "unpaid_trial": UNPAID_TRIAL_JA,
+                    "decline": DECLINE_JA, "caution": GENERIC_CAUTION_JA}[key]
+        return TEMPLATES[lang][key]
+
+    if found & {"illegal_or_mule", "crypto_investment", "upfront_payment"}:
+        rep.reply_ja = tpl("decline")  # nothing to negotiate: just say no, politely
+    elif found & _HARD_CATEGORIES:
+        rep.reply_ja = tpl("safe_decline")
+    elif "unpaid_trial" in found:
+        rep.reply_ja = tpl("unpaid_trial")
     elif flagged:
-        rep.reply_ja = GENERIC_CAUTION_JA
+        rep.reply_ja = tpl("caution")
     elif model_reply and _reply_is_safe(model_reply):
         rep.reply_ja, rep.reply_source = model_reply, "model"
     elif model_reply:
-        rep.notes.append("モデルの返信案に外部ツール名・URL等が含まれていたため、表示しませんでした")
+        rep.notes.append("model reply mentioned an outside tool, URL or contact detail, so it was not shown")
     return rep

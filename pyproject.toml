@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "gig-guard"
 version = "0.1.0"
-description = "Check Japanese freelance job posts and client messages for scams and bad pay, locally with Gemma"
+description = "Scam & fit check for freelance gig posts and client messages (any platform, EN/JA/ZH), locally with Gemma"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}

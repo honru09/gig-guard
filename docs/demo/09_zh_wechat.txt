@@ -1,0 +1,24 @@
+🔴 HIGH  応募・返信は見送り推奨 / Don't apply or reply
+
+■ ルールで検出 / Rule hits
+  [high] Moves the conversation off the platform / プラットフォーム外での連絡に誘導
+      「…0以上,轻松上手。 具体详情加我微信 vx: abc123 详聊…」
+      → クラウドワークス・ランサーズ等は規約で外部連絡を禁止しています。返信は必ずサイト内メッセージで行い、リンクは開かないでください。
+      → Upwork, Fiverr, CrowdWorks and most platforms forbid moving contact or payment off-platform. Reply inside the site and don't open the link.
+  [high] Asks the worker to pay first / 応募者側に支払いを要求
+      「…abc123 详聊。入职需要先交200元培训费,培训后马上安…」
+      「…详聊。入职需要先交200元培训费,培训后马上安排任务。」
+      → 仕事を受けるためにお金を払う案件は、ほぼ詐欺か情報商材です。支払わないでください。
+      → A job you have to pay for is almost always a scam or an info-product sale. Don't pay.
+  [medium] Too-good-to-be-true pay / 楽すぎる高収入アピール
+      「…这边有个在家兼职,打字录入,日入300以上,轻松上手。 具体详情加…」
+      → 「誰でも簡単」「スマホだけで月◯万」は情報商材や副業詐欺の決まり文句です。
+      → 'Anyone can earn ¥300k a month on a phone' is stock side-hustle-scam wording.
+
+■ お金と時間 / Pay
+  報酬 / pay: ¥200.00 CNY  (after 0.0% fee: ¥200.00 CNY)
+  作業時間 / hours: ?
+  ・hours not stated (can't compute the effective hourly rate)
+
+■ 返信案 / reply to send on-platform (定型文 / template)
+  您好，感谢您的邀请，不过这次我就不接了，祝项目顺利。

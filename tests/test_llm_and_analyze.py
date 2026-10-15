@@ -2,7 +2,7 @@ import json
 import unittest
 
 from gigguard.analyze import (
-    GENERIC_CAUTION_JA, SAFE_DECLINE_JA, UNPAID_TRIAL_JA, analyze, quote_in_text,
+    DECLINE_JA, GENERIC_CAUTION_JA, SAFE_DECLINE_JA, UNPAID_TRIAL_JA, analyze, quote_in_text,
 )
 from gigguard.llm import SYSTEM_PROMPT, build_user_prompt, parse_model_json
 
@@ -104,7 +104,7 @@ class AnalyzeTests(unittest.TestCase):
         self.assertEqual(analyze(MULE_POST).risk, "none")  # rules alone miss it
         self.assertEqual(rep.risk, "high")
         self.assertEqual(len(rep.model_only_findings), 1)
-        self.assertEqual(rep.reply_ja, SAFE_DECLINE_JA)
+        self.assertEqual(rep.reply_ja, DECLINE_JA)
 
     def test_hallucinated_finding_cannot_escalate(self):
         m = FakeModel({"risk": "high", "findings": [finding("off_platform_contact", "high", "LINEで連絡してください")]})
@@ -112,7 +112,7 @@ class AnalyzeTests(unittest.TestCase):
         self.assertEqual(rep.risk, "none")
         self.assertEqual(rep.findings, [])
         self.assertEqual(len(rep.rejected_findings), 1)
-        self.assertTrue(any("破棄" in n for n in rep.notes))
+        self.assertTrue(any("dropped" in n for n in rep.notes))
 
     def test_top_level_risk_alone_does_not_escalate(self):
         rep = analyze(CLEAN_POST, model=FakeModel({"risk": "high", "summary_ja": "怪しい", "findings": []}))
@@ -139,7 +139,7 @@ class AnalyzeTests(unittest.TestCase):
         bad = "LINEのURLから友だち追加し、アンケートに回答します。ただしサイト内で進めたいです。"
         rep = analyze(CLEAN_POST, model=FakeModel({"risk": "low", "findings": [], "reply_ja": bad}))
         self.assertIsNone(rep.reply_ja)
-        self.assertTrue(any("外部ツール" in n for n in rep.notes))
+        self.assertTrue(any("outside tool" in n for n in rep.notes))
         rep = analyze(CLEAN_POST, model=FakeModel({"risk": "low", "reply_ja": "詳細は https://x.example で"}))
         self.assertIsNone(rep.reply_ja)
 

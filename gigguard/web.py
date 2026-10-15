@@ -21,11 +21,11 @@ pre{{font-size:15px;font-family:ui-monospace,"Noto Sans Mono CJK JP",monospace;w
 small{{color:#59636e}}
 </style></head><body>
 <h1>gig-guard</h1>
-<p>案件文やクライアントのメッセージを貼り付けてください。 / Paste a job post or client message.<br><small>すべてこのPCの中で処理されます / everything runs on this machine (Gemma via Ollama).</small></p>
+<p>Paste a job post or client message (EN / 日本語 / 中文).<br><small>すべてこのPCの中で処理されます / everything runs on this machine (Gemma via Ollama).</small></p>
 <form method="post" action="/">
 <textarea name="text" placeholder="例: 応募ありがとうございます。詳細はLINEでお送りします…">{text}</textarea>
 <label><input type="checkbox" name="nollm" value="1" {nollm}> ルールのみ / rules only</label>
-<select name="lang"><option value="both">日本語 + English</option><option value="ja" {ja}>日本語</option><option value="en" {en}>English</option></select><br>
+<select name="lang"><option value="all">EN + 日本語 + 中文</option><option value="both">EN + 日本語</option><option value="zh" {zh}>中文</option><option value="ja" {ja}>日本語</option><option value="en" {en}>English</option></select><br>
 <button type="submit">チェック</button>
 </form>
 {result}
@@ -47,7 +47,7 @@ def make_handler(model_factory, fee_rate: float, min_hourly: int):
         def do_GET(self):
             if self.path not in ("/", "/index.html"):
                 return self._send(404, b"not found", "text/plain")
-            page = PAGE.format(text="", nollm="", result="", ja="", en="")
+            page = PAGE.format(text="", nollm="", result="", ja="", en="", zh="")
             self._send(200, page.encode(), "text/html; charset=utf-8")
 
         def do_POST(self):
@@ -68,14 +68,14 @@ def make_handler(model_factory, fee_rate: float, min_hourly: int):
             form = parse_qs(raw)
             text = form.get("text", [""])[0]
             nollm = form.get("nollm", [""])[0] == "1"
-            lang = form.get("lang", ["both"])[0]
-            lang = lang if lang in ("ja", "en", "both") else "both"
+            lang = form.get("lang", ["all"])[0]
+            lang = lang if lang in ("ja", "en", "zh", "both", "all") else "all"
             result = ""
             if text.strip():
                 rep = analyze(text, model=None if nollm else model_factory(), fee_rate=fee_rate, min_hourly_yen=min_hourly)
                 result = "<pre>" + html.escape(text_report(rep, lang)) + "</pre>"
             page = PAGE.format(text=html.escape(text), nollm="checked" if nollm else "", result=result,
-                               ja="selected" if lang == "ja" else "", en="selected" if lang == "en" else "")
+                               ja="selected" if lang == "ja" else "", en="selected" if lang == "en" else "", zh="selected" if lang == "zh" else "")
             self._send(200, page.encode(), "text/html; charset=utf-8")
 
     return Handler

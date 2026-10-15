@@ -1,0 +1,3 @@
+We need a Spring Boot developer to fix a bug in our REST API (pagination returns duplicates).
+Fixed price $200, estimated 4-6 hours. Repo access will be shared through GitHub once the contract starts.
+We can do a short Zoom call to walk through the codebase if helpful.

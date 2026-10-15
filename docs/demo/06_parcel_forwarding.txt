@@ -1,0 +1,6 @@
+🟢 OK  大きな問題なし（条件だけ確認） / Looks fine (just check the terms)
+
+■ お金と時間 / Pay
+  報酬 / pay: ¥3,000  (after 0.0% fee: ¥3,000)
+  作業時間 / hours: ?
+  ・作業時間が読み取れませんでした（実質時給は計算できません）

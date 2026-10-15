@@ -1,0 +1,6 @@
+🟢 OK  大きな問題なし（条件だけ確認） / Looks fine (just check the terms)
+
+■ お金と時間 / Pay
+  報酬 / pay: $200.00  (after 0.0% fee: $200.00)
+  作業時間 / hours: 5
+  実質時給 / effective hourly: $40.00  (floor $10.00)

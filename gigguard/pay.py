@@ -16,6 +16,19 @@ from .rules import normalize
 
 _NUM = r"([0-9]+(?:[.,][0-9]+)*)"
 
+# Approximate fees taken from the freelancer (check your platform; they change).
+PLATFORM_FEES = {
+    "direct": 0.0,        # direct client, invoice yourself
+    "upwork": 0.10,       # variable, roughly 0-15% per contract
+    "fiverr": 0.20,
+    "freelancer": 0.10,   # Freelancer.com: 10% or a minimum fixed fee
+    "crowdworks": 0.20,   # small contracts
+    "lancers": 0.165,
+    "coconala": 0.22,
+}
+# Default hourly floors per currency (override with --min-hourly).
+DEFAULT_FLOORS = {"JPY": 1200, "USD": 10, "CNY": 25}
+
 
 def _to_float(s: str) -> float:
     s = s.replace(",", "")
@@ -41,6 +54,7 @@ class PayEstimate:
     net_total_yen: Optional[float] = None
     effective_hourly_yen: Optional[float] = None
     fee_rate: float = 0.0
+    currency: str = "JPY"
     notes: tuple[str, ...] = ()
 
     def to_dict(self) -> dict:
@@ -59,6 +73,62 @@ _RANGE_H = re.compile(_NUM + r"\s*(?:〜|~|-|～|から)\s*" + _NUM + r"\s*時�
 _HOURS = re.compile(_NUM + r"\s*時間")
 _MINUTES = re.compile(_NUM + r"\s*分(?!の)")
 _TIME_KEY = re.compile(r"(作業時間|所要時間|目安|想定|工数|程度|くらい|ぐらい|ほど|かかり|見込み)")
+
+
+_USD_HOURLY = re.compile(r"(?:\$|USD\s*)" + _NUM + r"\s*(?:/\s*(?:hr|hour|h)\b|per\s+hour|an\s+hour|hourly)", re.I)
+_USD = re.compile(r"(?:\$|USD\s*)" + _NUM + r"(k)?|" + _NUM + r"\s*(?:USD|dollars)\b", re.I)
+_CNY_HOURLY = re.compile(r"(?:时薪|每小时)\s*" + _NUM + r"\s*(?:元|块)|" + _NUM + r"\s*(?:元|块)\s*/\s*(?:小时|时)")
+_CNY = re.compile(_NUM + r"\s*(万)?\s*(?:元|块|人民币|RMB)", re.I)
+_EN_RANGE_H = re.compile(_NUM + r"\s*(?:-|–|to)\s*" + _NUM + r"\s*(?:hours|hrs|h)\b", re.I)
+_EN_HOURS = re.compile(_NUM + r"\s*(?:hours|hrs|hour|h)\b", re.I)
+_EN_MIN = re.compile(_NUM + r"\s*(?:minutes|mins|min)\b", re.I)
+_ZH_RANGE_H = re.compile(_NUM + r"\s*(?:-|~|～|到|至)\s*" + _NUM + r"\s*(?:个)?小时")
+_ZH_HOURS = re.compile(_NUM + r"\s*(?:个)?小时")
+_ZH_MIN = re.compile(_NUM + r"\s*分钟")
+
+
+def _foreign(t: str):
+    """(currency, total, hourly, hours) for posts priced in USD or CNY, else None."""
+    cur = None
+    total = hourly = None
+    m = _USD_HOURLY.search(t)
+    if m:
+        cur, hourly = "USD", _to_float(m.group(1))
+    else:
+        amounts = []
+        for m in _USD.finditer(t):
+            if m.group(1):
+                v = _to_float(m.group(1)) * (1000 if m.group(2) else 1)
+            else:
+                v = _to_float(m.group(3))
+            amounts.append(v)
+        if amounts:
+            cur, total = "USD", max(amounts)
+    if cur is None:
+        m = _CNY_HOURLY.search(t)
+        if m:
+            cur, hourly = "CNY", _to_float(m.group(1) or m.group(2))
+        else:
+            amounts = [_to_float(m.group(1)) * (10_000 if m.group(2) else 1) for m in _CNY.finditer(t)]
+            if amounts:
+                cur, total = "CNY", max(amounts)
+    if cur is None:
+        return None
+    hours = None
+    for rng, single, mins in ((_EN_RANGE_H, _EN_HOURS, _EN_MIN), (_ZH_RANGE_H, _ZH_HOURS, _ZH_MIN)):
+        m = rng.search(t)
+        if m:
+            hours = (_to_float(m.group(1)) + _to_float(m.group(2))) / 2
+            break
+        m = single.search(t)
+        if m:
+            hours = _to_float(m.group(1))
+            break
+        m = mins.search(t)
+        if m:
+            hours = _to_float(m.group(1)) / 60
+            break
+    return cur, total, hourly, hours
 
 
 def _first_reward(text: str) -> Optional[float]:
@@ -118,6 +188,23 @@ def estimate(text: str, fee_rate: float = 0.20, chars_per_hour: int = 1500) -> P
     t = normalize(text)
     notes: list[str] = []
     est = PayEstimate(fee_rate=fee_rate)
+
+    if not (_YEN_SUFFIX.search(t) or _YEN_PREFIX.search(t) or _PER_CHAR.search(t) or _HOURLY.search(t)):
+        f = _foreign(t)
+        if f:
+            est.currency, est.total_yen, est.hourly_yen, est.hours = f
+            if est.hourly_yen is not None:
+                est.effective_hourly_yen = round(est.hourly_yen * (1 - fee_rate), 2)
+                if est.hours:
+                    est.total_yen = est.hourly_yen * est.hours
+            elif est.total_yen is not None and est.hours:
+                est.effective_hourly_yen = round(est.total_yen * (1 - fee_rate) / est.hours, 2)
+            if est.total_yen is not None:
+                est.net_total_yen = round(est.total_yen * (1 - fee_rate), 2)
+            if est.hours is None:
+                notes.append("hours not stated (can't compute the effective hourly rate)")
+            est.notes = tuple(notes)
+            return est
 
     pc = _PER_CHAR.search(t)
     if pc:

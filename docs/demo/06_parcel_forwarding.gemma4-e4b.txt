@@ -1,0 +1,20 @@
+🔴 HIGH  応募・返信は見送り推奨 / Don't apply or reply
+
+■ お金と時間 / Pay
+  報酬: 3,000円（手数料20%引き後 2,400円）
+  作業時間: ?
+  ・作業時間が読み取れませんでした（実質時給は計算できません）
+
+■ Gemma (gemma4:e4b, 35.8s, ローカル実行 / on this machine)
+  自宅に届いた荷物を指定の住所へ転送する作業を依頼されています。報酬は1件3,000円です。
+  The client is asking you to receive packages at your home and forward them to a specified address for 3,000 yen per item.
+  ✓ [high] 違法・名義貸しの疑い 「荷物の受け取りと転送をお願いします」  ★ Gemma only
+      荷物の受け取りと転送は、マネーロンダリングや詐欺の典型的な手口です。
+      Receiving and forwarding packages is a typical tactic for money laundering or scams.
+  確認したいこと:
+   - この作業は具体的にどのような荷物を取り扱うのでしょうか？
+   - 転送先の住所はどこになりますか？
+   - 作業の具体的な流れや、報酬の支払いタイミングについて詳しく教えていただけますでしょうか。
+
+■ サイト内で送る返信案 / reply to send on-platform（定型文 / template）
+  ご連絡ありがとうございます。恐れ入りますが、規約に沿ってやり取りはすべてこちらのメッセージ機能で進めさせていただけますでしょうか。案件の詳細や条件もこちらでご共有いただけましたら、検討のうえお返事いたします。

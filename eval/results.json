@@ -57,18 +57,18 @@
   },
   {
    "config": "rules + gemma4:e4b",
-   "risky_caught": 13,
+   "risky_caught": 14,
    "risky_total": 14,
    "safe_false_flags": 1,
    "safe_total": 6,
    "category_hits": 12,
    "category_total": 15,
-   "model_only_catches": 5,
-   "json_ok": 18,
+   "model_only_catches": 6,
+   "json_ok": 20,
    "n": 20,
-   "findings_verified": 17,
+   "findings_verified": 19,
    "findings_rejected": 0,
-   "median_seconds": 33.4
+   "median_seconds": 29.9
   }
  ],
  "rows": {
@@ -1677,26 +1677,28 @@
     "rejected_quotes": [],
     "json_ok": true,
     "error": null,
-    "seconds": 103.7,
-    "summary_en": "The client is asking applicants to add their LINE account for a screening questionnaire. They are also strongly pressuring for immediate response."
+    "seconds": 51.4,
+    "summary_en": "The client is asking you to add their external LINE account under the guise of a screening questionnaire."
    },
    {
     "id": "r02",
     "label": "risky",
-    "risk": "none",
-    "flagged": false,
+    "risk": "high",
+    "flagged": true,
     "rule_flagged": false,
     "expected": [
      "off_platform_contact"
     ],
-    "found": [],
-    "verified": 0,
+    "found": [
+     "off_platform_contact"
+    ],
+    "verified": 1,
     "rejected": 0,
     "rejected_quotes": [],
-    "json_ok": false,
-    "error": "HTTPError: HTTP Error 500: Internal Server Error",
-    "seconds": 99.9,
-    "summary_en": null
+    "json_ok": true,
+    "error": null,
+    "seconds": 22.5,
+    "summary_en": "The client asks you to contact them via Instagram DM for job details."
    },
    {
     "id": "r03",
@@ -1710,13 +1712,13 @@
     "found": [
      "off_platform_contact"
     ],
-    "verified": 0,
+    "verified": 1,
     "rejected": 0,
     "rejected_quotes": [],
-    "json_ok": false,
-    "error": "HTTPError: HTTP Error 500: Internal Server Error",
-    "seconds": 19.5,
-    "summary_en": null
+    "json_ok": true,
+    "error": null,
+    "seconds": 29.9,
+    "summary_en": "The client, claiming to be HR, is asking to move all future communication to Telegram."
    },
    {
     "id": "r04",
@@ -1735,8 +1737,8 @@
     "rejected_quotes": [],
     "json_ok": true,
     "error": null,
-    "seconds": 83.1,
-    "summary_en": "Recruiting typesetting staff, requiring a free trial before hiring. The task involves 4 spread pages and takes about 3-4 hours."
+    "seconds": 34.6,
+    "summary_en": "They are asking everyone to complete a free trial before hiring. The task involves typesetting 4 spreads and takes about 3-4 hours."
    },
    {
     "id": "r05",
@@ -1755,8 +1757,8 @@
     "rejected_quotes": [],
     "json_ok": true,
     "error": null,
-    "seconds": 36.7,
-    "summary_en": "This is a recruitment for an article writer, starting with a test writing piece that is unpaid. Successful completion may lead to ongoing projects."
+    "seconds": 33.2,
+    "summary_en": "They are looking for an article writer and are asking for a test article first, which is unpaid. If successful, ongoing work is expected."
    },
    {
     "id": "r06",
@@ -1777,8 +1779,8 @@
     "rejected_quotes": [],
     "json_ok": true,
     "error": null,
-    "seconds": 47.0,
-    "summary_en": "It promises over 300,000 yen per month with just a smartphone, but demands a high upfront fee for training materials before starting work."
+    "seconds": 46.7,
+    "summary_en": "It promises over 300,000 yen per month with just a smartphone, but requires purchasing an expensive manual first."
    },
    {
     "id": "r07",
@@ -1797,7 +1799,7 @@
     "rejected_quotes": [],
     "json_ok": true,
     "error": null,
-    "seconds": 33.1,
+    "seconds": 30.0,
     "summary_en": "This is a data entry job, but the client is asking for copies of a driver's license and My Number card before the contract."
    },
    {
@@ -1818,8 +1820,8 @@
     "rejected_quotes": [],
     "json_ok": true,
     "error": null,
-    "seconds": 34.9,
-    "summary_en": "This job involves opening an account on a specified exchange, purchasing a small amount of cryptocurrency, and submitting a screenshot for a ¥5,000 payment."
+    "seconds": 55.6,
+    "summary_en": "This job offers ¥5,000 per task for opening an account on a specified exchange, purchasing a small amount of cryptocurrency, and submitting a screenshot."
    },
    {
     "id": "r09",
@@ -1838,8 +1840,8 @@
     "rejected_quotes": [],
     "json_ok": true,
     "error": null,
-    "seconds": 33.7,
-    "summary_en": "The client is asking you to receive packages at your home and forward them to a specified address for ¥3,000 per item."
+    "seconds": 34.7,
+    "summary_en": "The client is asking you to receive packages at your home and forward them to a specified address for 3,000 yen per item."
    },
    {
     "id": "r10",
@@ -1859,7 +1861,7 @@
     "rejected_quotes": [],
     "json_ok": true,
     "error": null,
-    "seconds": 29.4,
+    "seconds": 24.7,
     "summary_en": "This is a request to buy unused bank accounts. It asks for the mailing of the cash card and bankbook."
    },
    {
@@ -1872,16 +1874,16 @@
      "illegal_or_mule"
     ],
     "found": [
-     "low_pay",
-     "too_good_to_be_true"
+     "too_good_to_be_true",
+     "vague_scope"
     ],
     "verified": 2,
     "rejected": 0,
     "rejected_quotes": [],
     "json_ok": true,
     "error": null,
-    "seconds": 50.0,
-    "summary_en": "This job requires purchasing a specified product on Amazon and posting a 5-star review. The product cost will be refunded later, and a reward of 1,000 yen will be paid."
+    "seconds": 45.1,
+    "summary_en": "This job requires purchasing a specified product on Amazon and posting a 5-star review. The product cost will be refunded later, along with a ¥1,000 reward."
    },
    {
     "id": "r12",
@@ -1893,7 +1895,7 @@
      "illegal_or_mule"
     ],
     "found": [
-     "illegal_or_mule",
+     "low_pay",
      "off_platform_contact"
     ],
     "verified": 2,
@@ -1901,8 +1903,8 @@
     "rejected_quotes": [],
     "json_ok": true,
     "error": null,
-    "seconds": 44.6,
-    "summary_en": "This job is to buy SNS accounts with over 1000 followers. It asks for login information."
+    "seconds": 43.3,
+    "summary_en": "This job is to buy SNS accounts with over 1000 followers. You are asked to provide login information."
    },
    {
     "id": "r13",
@@ -1919,8 +1921,8 @@
     "rejected_quotes": [],
     "json_ok": true,
     "error": null,
-    "seconds": 23.2,
-    "summary_en": "The client is asking for transcription of a 60-minute audio file and survey answering. The compensation is 300 yen."
+    "seconds": 16.1,
+    "summary_en": "The job requires transcribing a 60-minute audio file and answering a survey. The offered compensation is 300 yen."
    },
    {
     "id": "r14",
@@ -1939,7 +1941,7 @@
     "rejected_quotes": [],
     "json_ok": true,
     "error": null,
-    "seconds": 37.5,
+    "seconds": 41.7,
     "summary_en": "The client is suggesting an off-platform transaction due to fees and is asking for your email address."
    },
    {
@@ -1955,8 +1957,8 @@
     "rejected_quotes": [],
     "json_ok": true,
     "error": null,
-    "seconds": 24.3,
-    "summary_en": "This task involves researching about 20 pet-related stores and inputting the name, address, and URL into a spreadsheet. The fixed reward is 3,000 yen, and there is an initial online briefing."
+    "seconds": 22.5,
+    "summary_en": "This task involves researching about 20 pet-related stores and inputting their names, addresses, and URLs into a spreadsheet."
    },
    {
     "id": "s02",
@@ -1971,8 +1973,8 @@
     "rejected_quotes": [],
     "json_ok": true,
     "error": null,
-    "seconds": 26.2,
-    "summary_en": "This is a request to create LINE sticker illustrations featuring a cat character. The job is for 8 types at a price of 20,000 yen."
+    "seconds": 24.2,
+    "summary_en": "This is a request to create LINE sticker illustrations featuring a cat character. The job is for 8 types at a price of 20,000 JPY."
    },
    {
     "id": "s03",
@@ -1989,8 +1991,8 @@
     "rejected_quotes": [],
     "json_ok": true,
     "error": null,
-    "seconds": 25.8,
-    "summary_en": "This job involves managing a restaurant's LINE official account, requiring the creation of two posts per week. The compensation is ¥15,000 per month for about 5 hours of work."
+    "seconds": 28.0,
+    "summary_en": "This job involves managing a restaurant's LINE official account, requiring the creation of two posts per week. The monthly fee is ¥15,000 for about 5 hours of work."
    },
    {
     "id": "s04",
@@ -2005,8 +2007,8 @@
     "rejected_quotes": [],
     "json_ok": true,
     "error": null,
-    "seconds": 19.8,
-    "summary_en": "The client is requesting minor bug fixes for a Spring Boot API. Providing a GitHub repository is assumed."
+    "seconds": 23.1,
+    "summary_en": "This job requests minor bug fixes for a Spring Boot API. The work requires access to a GitHub repository."
    },
    {
     "id": "s05",
@@ -2021,8 +2023,8 @@
     "rejected_quotes": [],
     "json_ok": true,
     "error": null,
-    "seconds": 22.2,
-    "summary_en": "This is a request to write SEO articles in the job change genre. The structure and writing guidelines will be provided."
+    "seconds": 17.3,
+    "summary_en": "This is a request to write SEO articles in the career change genre. The structure and writing guidelines will be provided."
    },
    {
     "id": "s06",
@@ -2037,8 +2039,8 @@
     "rejected_quotes": [],
     "json_ok": true,
     "error": null,
-    "seconds": 20.7,
-    "summary_en": "This is a translation job from English to Japanese for a tourist pamphlet. The compensation is 24,000 JPY with a one-week deadline."
+    "seconds": 23.8,
+    "summary_en": "This is a translation job from English to Japanese for a tourist brochure. The compensation is 24,000 JPY with a one-week deadline."
    }
   ]
  }
