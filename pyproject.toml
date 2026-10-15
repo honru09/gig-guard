@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gig-guard"
+version = "0.1.0"
+description = "Check Japanese freelance job posts and client messages for scams and bad pay, locally with Gemma"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Xingrun Wang"}]
+dependencies = []
+
+[project.scripts]
+gig-guard = "gigguard.__main__:main"
+
+[tool.setuptools]
+packages = ["gigguard"]
